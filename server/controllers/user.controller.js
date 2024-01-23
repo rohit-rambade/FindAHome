@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { generateAccessAndRefreshToken } from "../utils/generateTokens.js";
 
 import {
   validateUserSignIn,
@@ -69,11 +70,29 @@ const signIn = async (req, res) => {
         message: "Invalid Password",
       });
     }
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      userExists._id
+    );
 
-    return res.status(201).json({
-      success: true,
-      message: "User Sign In Successfully",
-    });
+    const loggedInUser = await User.findById(userExists._id).select(
+      "-password -refreshToken"
+    );
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        success: true,
+        message: "User Sign In Successfully",
+        data: loggedInUser,
+        accessToken,
+        refreshToken,
+      });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: error.message });

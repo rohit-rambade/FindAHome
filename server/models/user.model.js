@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const userSchema = new Schema(
   {
     username: {
@@ -44,6 +45,37 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+userSchema.methods.generateAccessToken = function () {
+  try {
+    const payload = {
+      id: this._id,
+      email: this.email,
+      role: this.role,
+    };
+
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "15min",
+    });
+  } catch (error) {
+    console.error("Error generating access token:", error);
+    throw error;
+  }
+};
+
+userSchema.methods.generateRefreshToken = function () {
+  try {
+    const payload = {
+      id: this._id,
+    };
+
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+      expiresIn: "1d",
+    });
+  } catch (error) {
+    console.error("Error generating refresh token:", error);
+    throw error;
+  }
+};
 const User = mongoose.model("User", userSchema);
 
 export default User;

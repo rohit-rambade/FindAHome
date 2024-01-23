@@ -3,11 +3,12 @@ import dotenv from "dotenv";
 dotenv.config({
   path: "./.env",
 });
-
+import cookieParser from "cookie-parser";
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 import { connectDB } from "./config/database.js";
 import userRoutes from "./routes/user.routes.js";
 connectDB(); //database connection
