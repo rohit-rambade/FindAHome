@@ -73,7 +73,7 @@ const signIn = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       userExists._id
     );
-
+    console.log(accessToken, refreshToken);
     const loggedInUser = await User.findById(userExists._id).select(
       "-password -refreshToken"
     );
