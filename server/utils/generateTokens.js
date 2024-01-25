@@ -4,11 +4,11 @@ export const generateAccessAndRefreshToken = async (userId) => {
     const user = await User.findById(userId);
 
     const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
 
     user.save({ validateBeforeSave: false });
-    console.log(accessToken, refreshToken);
+
     return { accessToken, refreshToken };
   } catch (error) {
     return error.message;

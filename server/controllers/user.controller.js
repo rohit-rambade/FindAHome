@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import { generateAccessAndRefreshToken } from "../utils/generateTokens.js";
-
+import jwt from "jsonwebtoken";
 import {
   validateUserSignIn,
   validateUserSignUp,
@@ -131,4 +131,56 @@ const signOut = async (req, res) => {
   }
 };
 
-export { signUp, signIn, signOut };
+const refreshAccessToken = async (req, res) => {
+  try {
+    const incomingRefreshToken =
+      req.cookies.refreshToken || req.body.refreshToken;
+    if (!incomingRefreshToken) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized Request" });
+    }
+
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedToken.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Refresh Token Or User Not Found",
+      });
+    }
+
+    if (incomingRefreshToken !== user.refreshToken) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Refresh Token Expired Or Used" });
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id
+    );
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        success: true,
+        message: "Access Token Refreshed",
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ success: false, message: "Invalid Token" });
+  }
+};
+
+export { signUp, signIn, signOut, refreshAccessToken };
