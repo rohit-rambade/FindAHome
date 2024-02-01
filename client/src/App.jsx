@@ -1,14 +1,14 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
 import Header from "./components/common/Header";
-import Home from "./Pages/Home";
-import SignUp from "./Pages/SignUp";
+import Footer from "./components/common/Footer";
 
 function App() {
   return (
     <>
       <Header />
-      <SignUp />
-      <Home />
+      <Outlet />
+      <Footer />
     </>
   );
 }

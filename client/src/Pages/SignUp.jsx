@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import toast from "react-toastify";
 const SignUp = () => {
   const initialState = {
     username: "",
@@ -19,6 +18,7 @@ const SignUp = () => {
   console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.lo;
     console.log(formData);
     const res = await axios.post("/api/users/signup", formData, {
       headers: {

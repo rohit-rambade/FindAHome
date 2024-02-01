@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaAlignRight, FaXmark } from "react-icons/fa6";
+import { Link, NavLink } from "react-router-dom";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -9,7 +10,9 @@ const Header = () => {
         <nav className=" flex w-full shadow-sm ">
           <div className="flex justify-between w-full  md:w-auto p-4 ">
             <div>
-              <h1 className="text-xl font-bold">Find A Home</h1>
+              <Link to="/" className="text-xl font-bold">
+                Find A Home
+              </Link>
             </div>
 
             <div className="flex space-x-5 items-center justify-center ">
@@ -30,14 +33,16 @@ const Header = () => {
           >
             <div className="flex   ">
               <ul className="flex flex-col gap-y-4 md:gap-0 md:flex md:flex-row md:justify-center md:items-center">
-                <li className="md:mr-4">Home</li>
+                <li>
+                  <NavLink className="md:mr-4">Home</NavLink>
+                </li>
                 <li className="md:mr-4">Listing</li>
                 <li className="md:mr-4">Contact</li>
               </ul>
             </div>
 
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0  md:w-full md:space-x-2 ">
-              <button className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700">
+              <Link className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -51,8 +56,8 @@ const Header = () => {
                   />
                 </svg>
                 Dashboard
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700">
+              </Link>
+              <Link className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -65,9 +70,12 @@ const Header = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Sign Up | Sign In
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700">
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded-lg duration-150 hover:bg-indigo-500 active:bg-indigo-700"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -81,7 +89,7 @@ const Header = () => {
                   />
                 </svg>
                 Join Now
-              </button>
+              </Link>
             </div>
           </div>
         </nav>
