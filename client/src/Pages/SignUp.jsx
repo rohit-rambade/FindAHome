@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const SignUp = () => {
   const initialState = {
     username: "",
@@ -119,12 +120,12 @@ const SignUp = () => {
                 </button>
                 <p className="text-sm font-light text-gray-500 ">
                   Already have an account?
-                  <a
-                    href="#"
+                  <Link
+                    to="/signin"
                     className="font-medium text-primary-600 hover:underline "
                   >
-                    Login here
-                  </a>
+                    Sign In
+                  </Link>
                 </p>
               </form>
             </div>
