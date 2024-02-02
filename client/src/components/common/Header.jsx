@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FaAlignRight, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { isAuthenticated } from "../../slices/authSlice";
+import { isAuthenticated, resetAuth } from "../../slices/authSlice";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
@@ -14,6 +14,7 @@ const Header = () => {
       withCredentials: true,
     });
     dispatch(isAuthenticated(false));
+    dispatch(resetAuth());
 
     console.log(res.data);
   };
