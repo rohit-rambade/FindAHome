@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const SignUp = () => {
   const initialState = {
     username: "",
@@ -9,6 +10,7 @@ const SignUp = () => {
     role: "student",
   };
   const [formData, setFormData] = useState(initialState);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -19,15 +21,27 @@ const SignUp = () => {
   console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.lo;
-    console.log(formData);
-    const res = await axios.post("/api/users/signup", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(res);
-    setFormData(initialState);
+    try {
+      // toast.loading("Signing Up...");
+      console.log(formData);
+      const res = await axios.post("/api/users/signup", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { success, message } = res.data;
+
+      if (success) {
+        toast.success(message);
+        navigate("/signin");
+      }
+      setFormData(initialState);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+      toast.error(error.response.data.message);
+    }
   };
   return (
     <div>

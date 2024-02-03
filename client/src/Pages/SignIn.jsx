@@ -1,9 +1,9 @@
 import axios from "axios";
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setTokens } from "../slices/authSlice";
-
+import { toast } from "react-toastify";
 const initialState = {
   email: "",
   password: "",
@@ -21,23 +21,27 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/users/signin", formData, {
+      toast.loading("Signing In..");
+      const { data, status } = await axios.post("/api/users/signin", formData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const { accessToken, refreshToken } = res.data;
-      console.log("signIn data", res.data.accessToken);
+      const { accessToken, refreshToken, success, message } = data;
       dispatch(setTokens({ accessToken, refreshToken }));
+      console.log(message);
+      if (success) {
+        toast.dismiss();
+        toast.success(message);
 
-      if (res.data.success) {
         navigate("/");
       }
     } catch (error) {
-      console.log();
+      toast.dismiss();
+      toast.error(error.response.data.message || "An error occurred.");
     }
   };
-  console.log(formData);
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
