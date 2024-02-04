@@ -7,6 +7,7 @@ import {
   validationError,
 } from "../utils/validations/userValidations.js";
 import { StudentProfile } from "../models/student.model.js";
+import { LandlordProfile } from "../models/landlord.model.js";
 
 const signUp = async (req, res) => {
   try {
@@ -212,14 +213,41 @@ const createProfile = async (req, res) => {
           ...req.body,
         });
         console.log("Profile updated:", profileExists._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile updated" });
       } else {
-        // If profile doesn't exist, create a new one
         const savedProfile = await new StudentProfile({ ...req.body });
         await savedProfile.save();
         user.details = savedProfile._id;
         await user.save();
-        console.log("New profile created:", savedProfile._id);
+        console.log("Profile Created:", savedProfile._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile Created" });
       }
+    } else if (user.role == "landlord") {
+      const profileExists = await LandlordProfile.findById(user.details);
+      console.log("profileExists", profileExists);
+      if (profileExists) {
+        await LandlordProfile.findByIdAndUpdate(profileExists._id, {
+          ...req.body,
+        });
+        console.log("Profile updated:", profileExists._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile updated" });
+      } else {
+        const savedProfile = await new LandlordProfile({ ...req.body });
+        await savedProfile.save();
+        user.details = savedProfile._id;
+        await user.save();
+        console.log("Profile Created:", savedProfile._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile Created" });
+      }
+    } else {
     }
   } catch (error) {
     console.log(error);
