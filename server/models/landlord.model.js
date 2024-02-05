@@ -13,6 +13,12 @@ const landlordProfileSchema = new Schema({
     },
   ],
   amenities: [{ type: String, enum: ["Hot Water", "Tiffin", "Internet"] }],
+  listings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Listing",
+    },
+  ],
 });
 
 export const LandlordProfile = mongoose.model(
