@@ -6,6 +6,8 @@ import {
   validateUserSignUp,
   validationError,
 } from "../utils/validations/userValidations.js";
+import { StudentProfile } from "../models/student.model.js";
+import { LandlordProfile } from "../models/landlord.model.js";
 
 const signUp = async (req, res) => {
   try {
@@ -74,9 +76,15 @@ const signIn = async (req, res) => {
       userExists._id
     );
     console.log(accessToken, refreshToken);
-    const loggedInUser = await User.findById(userExists._id).select(
-      "-password -refreshToken"
-    );
+    let loggedInUser;
+    if (userExists.role === "student") {
+      loggedInUser = await User.findById(userExists._id)
+        .select("-password -refreshToken")
+        .populate({
+          path: "details",
+          model: "StudentProfile",
+        });
+    } /* else populate other profile */
 
     const options = {
       httpOnly: true,
@@ -183,4 +191,71 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
-export { signUp, signIn, signOut, refreshAccessToken };
+const createProfile = async (req, res) => {
+  // const { id } = req.user._id;
+
+  try {
+    const { id } = req.user;
+    // console.log(id, email, role);
+    const user = await User.findById(id);
+    console.log(user);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User Not Found" });
+    }
+
+    if (user.role === "student") {
+      const profileExists = await StudentProfile.findById(user.details);
+      console.log("profileExists", profileExists);
+      if (profileExists) {
+        await StudentProfile.findByIdAndUpdate(profileExists._id, {
+          ...req.body,
+        });
+        console.log("Profile updated:", profileExists._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile updated" });
+      } else {
+        const savedProfile = await new StudentProfile({ ...req.body });
+        await savedProfile.save();
+        user.details = savedProfile._id;
+        await user.save();
+        console.log("Profile Created:", savedProfile._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile Created" });
+      }
+    } else if (user.role == "landlord") {
+      const profileExists = await LandlordProfile.findById(user.details);
+      console.log("profileExists", profileExists);
+      if (profileExists) {
+        await LandlordProfile.findByIdAndUpdate(profileExists._id, {
+          ...req.body,
+        });
+        console.log("Profile updated:", profileExists._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile updated" });
+      } else {
+        const savedProfile = await new LandlordProfile({ ...req.body });
+        await savedProfile.save();
+        user.details = savedProfile._id;
+        await user.save();
+        console.log("Profile Created:", savedProfile._id);
+        return res
+          .status(201)
+          .json({ success: true, message: "Profile Created" });
+      }
+    } else {
+    }
+  } catch (error) {
+    console.log(error);
+    res.json(502).json({ success: false, error });
+  }
+
+  // console.log(user.email);
+  // res.json({ data: user });
+};
+
+export { signUp, signIn, signOut, refreshAccessToken, createProfile };

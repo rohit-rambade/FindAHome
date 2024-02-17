@@ -22,6 +22,9 @@ const userSchema = new Schema(
       type: String,
       enum: ["admin", "student", "landlord"],
     },
+    details: {
+      type: Schema.Types.ObjectId,
+    },
     refreshToken: String,
   },
   {
