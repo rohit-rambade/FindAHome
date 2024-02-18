@@ -8,6 +8,9 @@ const UserProfile = () => {
         <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">
           <div className=" ">
             <div className="bg-white shadow rounded-lg p-6">
+              <div className="flex justify-end">
+                <FaEdit size={25} color="blue" />
+              </div>
               <div className=" bg-white shadow rounded-lg p-6">
                 <div className="flex flex-col items-center">
                   <img
@@ -26,9 +29,7 @@ const UserProfile = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end">
-                <FaEdit size={25} color="blue" />
-              </div>
+
               <div>
                 <h2 className="text-xl font-bold mb-4">About Me</h2>
                 <p className="text-gray-700">

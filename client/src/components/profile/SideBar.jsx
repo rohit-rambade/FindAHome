@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const SideBar = () => {
   return (
-    <div className="">
-      <aside class=" top-0 left-0 z-40 md:w-64">
+    <div>
+      <aside class=" md:w-64 lg:h-screen">
         <div class="h-full px-3 py-4 overflow-y-auto ">
           <ul class="flex flex-wrap justify-center items-center md:items-start md:flex-col md:space-y-2 font-medium">
             <li>
@@ -24,6 +24,15 @@ const SideBar = () => {
               >
                 <FaHome />
                 <span>Listings</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="addlisting"
+                className="flex items-center p-2 rounded-lg space-x-2"
+              >
+                <FaHome />
+                <span>Add Listing</span>
               </Link>
             </li>
           </ul>

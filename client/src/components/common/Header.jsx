@@ -49,10 +49,20 @@ const Header = () => {
             <div className="flex   ">
               <ul className="flex flex-col gap-y-4 md:gap-0 md:flex md:flex-row md:justify-center md:items-center">
                 <li>
-                  <NavLink className="md:mr-4">Home</NavLink>
+                  <Link className="md:mr-4" to="/">
+                    Home
+                  </Link>
                 </li>
-                <li className="md:mr-4">Listing</li>
-                <li className="md:mr-4">Contact</li>
+                <li>
+                  <Link className="md:mr-4" to="/listings">
+                    Listing
+                  </Link>
+                </li>
+                <li>
+                  <Link className="md:mr-4" to="/">
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
 

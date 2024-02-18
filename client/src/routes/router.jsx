@@ -6,6 +6,8 @@ import SignIn from "../pages/SignIn";
 import Profile from "../pages/Profile";
 import Listings from "../components/profile/landlord/Listings";
 import UserProfile from "../components/profile/UserProfile";
+import AddListing from "../components/profile/landlord/AddListing";
+import AllListings from "../pages/AllListings";
 
 export const router = createBrowserRouter([
   {
@@ -36,7 +38,15 @@ export const router = createBrowserRouter([
             path: "listings",
             element: <Listings />,
           },
+          {
+            path: "addlisting",
+            element: <AddListing />,
+          },
         ],
+      },
+      {
+        path: "listings",
+        element: <AllListings />,
       },
     ],
   },
