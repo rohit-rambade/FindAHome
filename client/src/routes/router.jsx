@@ -4,6 +4,8 @@ import Home from "../pages/Home";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import Profile from "../pages/Profile";
+import Listings from "../components/profile/landlord/Listings";
+import UserProfile from "../components/profile/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +27,16 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+        children: [
+          {
+            path: "",
+            element: <UserProfile />,
+          },
+          {
+            path: "listings",
+            element: <Listings />,
+          },
+        ],
       },
     ],
   },
