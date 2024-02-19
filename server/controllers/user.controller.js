@@ -84,6 +84,13 @@ const signIn = async (req, res) => {
           path: "details",
           model: "StudentProfile",
         });
+    } else if (userExists.role === "landlord") {
+      loggedInUser = await User.findById(userExists._id)
+        .select("-password -refreshToken")
+        .populate({
+          path: "details",
+          model: "LandlordProfile",
+        });
     } /* else populate other profile */
 
     const options = {
