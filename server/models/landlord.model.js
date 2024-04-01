@@ -19,6 +19,12 @@ const landlordProfileSchema = new Schema({
       ref: "Listing",
     },
   ],
+  rentRequests: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "RentRequest",
+    },
+  ],
 });
 
 export const LandlordProfile = mongoose.model(

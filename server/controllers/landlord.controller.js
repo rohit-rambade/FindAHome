@@ -1,19 +1,25 @@
 import cloudinary from "../config/cloudinaryConfig.js";
 import { LandlordProfile } from "../models/landlord.model.js";
 import { Listing } from "../models/listing.model.js";
+import RentRequest from "../models/rentRequest.model.js";
 import User from "../models/user.model.js";
 
 const createListing = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.user; // Assuming req.user contains the user ID
 
   try {
     const user = await User.findById(id);
-    const userDetails = await LandlordProfile.findById(user.details);
-
     if (!user) {
       return res
         .status(400)
         .json({ success: false, message: "User Not Found" });
+    }
+
+    const userDetails = await LandlordProfile.findById(user.details);
+    if (!userDetails) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Landlord Profile Not Found" });
     }
 
     // Handle image upload to Cloudinary
@@ -22,38 +28,33 @@ const createListing = async (req, res) => {
 
     // Loop through each image URL
     for (const imageUrl of images) {
-      // Assuming imageUrl is the URL of the image to be uploaded
       const uploadOptions = { folder: "SHF" }; // Customize folder name if needed
 
-      const result = await new Promise((resolve, reject) => {
-        // Use cloudinary.uploader.upload to upload the image directly from the URL
-        cloudinary.uploader.upload(imageUrl, uploadOptions, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      });
-
+      // Use cloudinary.uploader.upload to upload the image directly from the URL
+      const result = await cloudinary.uploader.upload(imageUrl, uploadOptions);
       uploadedImages.push(result.secure_url);
     }
 
-    const newListing = new Listing({
+    const newListingData = {
       ...req.body,
       images: uploadedImages,
-      landlord: user,
-    });
+      landlord: user._id,
+    };
 
+    const newListing = new Listing(newListingData);
     await newListing.save();
 
     userDetails.listings.push(newListing);
     await userDetails.save();
 
-    res.status(201).json({ success: true, message: "Listing Added" });
+    res
+      .status(201)
+      .json({ success: true, message: "Listing Added", listing: newListing });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 const updateListing = async (req, res) => {
   const { id } = req.user;
   const { listingId } = req.params;
@@ -129,4 +130,54 @@ const getListingsForLandlord = async (req, res) => {
   }
 };
 
-export { createListing, updateListing, deleteListing, getListingsForLandlord };
+const verifyAndAcceptRequest = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const { status } = req.body; // Assuming the status is sent in the request body
+
+    const rentRequest = await RentRequest.findById(requestId);
+    if (!rentRequest) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Rent request not found" });
+    }
+
+    // Verify and update the status based on the value sent from frontend
+    rentRequest.status = status; // Assuming status is a valid value like "Approved" or "Rejected"
+    await rentRequest.save();
+
+    res.status(200).json({ success: true, message: "Rent request updated" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const markPaymentAsPaid = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    const rentRequest = await RentRequest.findById(requestId);
+    if (!rentRequest) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Rent request not found" });
+    }
+
+    // Mark payment as paid
+    rentRequest.paymentStatus = "Paid";
+    await rentRequest.save();
+
+    res.status(200).json({ success: true, message: "Payment marked as paid" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export {
+  createListing,
+  updateListing,
+  deleteListing,
+  getListingsForLandlord,
+  verifyAndAcceptRequest,
+  markPaymentAsPaid,
+};

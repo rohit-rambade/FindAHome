@@ -64,6 +64,12 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
+  sentRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RentRequest",
+    },
+  ],
 });
 
 export const StudentProfile = mongoose.model(

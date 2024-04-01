@@ -1,7 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const listingSchema = new Schema({
-  landlord: { type: mongoose.Schema.Types.ObjectId, ref: "Landlord" },
+  landlord: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "LandlordProfile",
+  },
   images: [String],
   location: String,
   proximityToCampus: Number,

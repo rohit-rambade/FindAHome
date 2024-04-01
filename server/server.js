@@ -12,11 +12,12 @@ app.use(cookieParser());
 import { connectDB } from "./config/database.js";
 import userRoutes from "./routes/user.routes.js";
 import landlordRoutes from "./routes/landlord.routes.js";
+import studentRoutes from "./routes/student.routes.js";
 connectDB(); //database connection
 
 app.use("/api/users", userRoutes);
 app.use("/api/landlord", landlordRoutes);
-
+app.use("/api/student", studentRoutes);
 app.listen(PORT, () => {
   console.log(`Server Started On Port ${PORT}`);
 });
