@@ -1,10 +1,11 @@
 import { LandlordProfile } from "../models/landlord.model.js";
 import { Listing } from "../models/listing.model.js";
 import RentRequest from "../models/rentRequest.model.js";
+import { StudentProfile } from "../models/student.model.js";
 
 const createRentRequest = async (req, res) => {
   try {
-    const { studentId, listingId } = req.body;
+    const { studentId, listingId, message, additionalDetails } = req.body;
 
     // Check if the listing exists
     const listingExists = await Listing.findById(listingId);
@@ -29,6 +30,8 @@ const createRentRequest = async (req, res) => {
       student: studentId,
       listing: listingId,
       status: "Pending", // Set initial status as Pending
+      message: message || "", // Include the message if provided
+      additionalDetails: additionalDetails || "", // Include additional details if provided
     });
 
     const savedRequest = await newRentRequest.save();

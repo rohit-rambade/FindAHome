@@ -23,6 +23,14 @@ const rentRequestSchema = new Schema({
     enum: ["Pending", "Paid"],
     default: "Pending",
   }, // Payment status
+  message: {
+    type: String,
+    default: "",
+  }, // Message from student to landlord
+  additionalDetails: {
+    type: String,
+    default: "",
+  }, // Additional details provided by student
   createdAt: { type: Date, default: Date.now },
 });
 

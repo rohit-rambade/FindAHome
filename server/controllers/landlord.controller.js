@@ -156,11 +156,19 @@ const markPaymentAsPaid = async (req, res) => {
   try {
     const { requestId } = req.params;
 
+    // Find the rent request by ID
     const rentRequest = await RentRequest.findById(requestId);
     if (!rentRequest) {
       return res
         .status(404)
         .json({ success: false, message: "Rent request not found" });
+    }
+
+    // Check if the rent request status is "Approved"
+    if (rentRequest.status !== "Approved") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Rent request is not approved" });
     }
 
     // Mark payment as paid

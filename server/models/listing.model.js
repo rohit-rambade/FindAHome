@@ -54,8 +54,6 @@ const listingSchema = new Schema({
     windowsAndNaturalLight: Boolean,
     flooringType: String,
   },
-  rating: Number,
-  reviews: [String],
 });
 
 export const Listing = mongoose.model("Listing", listingSchema);
