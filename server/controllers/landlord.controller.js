@@ -4,6 +4,8 @@ import { Listing } from "../models/listing.model.js";
 import RentRequest from "../models/rentRequest.model.js";
 import User from "../models/user.model.js";
 import fs from "fs";
+import { getImagePublicIdFromUrl } from "../utils/getImageURL.js";
+import { log } from "console";
 
 const createListing = async (req, res) => {
   const { id } = req.user; // Assuming req.user contains the user ID
@@ -107,6 +109,12 @@ const deleteListing = async (req, res) => {
         .json({ success: false, message: "Listing Not Found" });
     }
 
+    // Delete images from Cloudinary before deleting the listing
+    for (const imageUrl of listing.images) {
+      const publicId = getImagePublicIdFromUrl(imageUrl); // Extract public ID from Cloudinary URL
+      await cloudinary.uploader.destroy(publicId); // Delete image from Cloudinary
+    }
+
     await Listing.findByIdAndDelete(listingId);
     const userDetails = await LandlordProfile.findById(user.details);
     if (userDetails) {
@@ -121,15 +129,15 @@ const deleteListing = async (req, res) => {
 };
 
 const getListingsForLandlord = async (req, res) => {
-  const { landlordId } = req.body;
+  const { id } = req.user;
 
   try {
-    const listings = await Listing.find({ landlord: landlordId });
+    const listings = await Listing.find({ landlord: id }); // Use find instead of findById
 
-    log;
+    console.log(listings);
     res.status(200).json({ success: true, data: listings });
   } catch (error) {
-    handleError(error, res);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
