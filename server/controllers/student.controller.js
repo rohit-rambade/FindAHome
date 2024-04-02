@@ -20,31 +20,33 @@ const createRentRequest = async (req, res) => {
       student: studentId,
       listing: listingId,
     });
+
     if (existingRequest) {
       return res
         .status(400)
         .json({ success: false, message: "Request already sent" });
     }
 
+    // Create a new rent request if no existing request is found
     const newRentRequest = new RentRequest({
       student: studentId,
       listing: listingId,
-      status: "Pending", // Set initial status as Pending
-      message: message || "", // Include the message if provided
-      additionalDetails: additionalDetails || "", // Include additional details if provided
+      status: "Pending",
+      message: message || "",
+      additionalDetails: additionalDetails || "",
     });
 
     const savedRequest = await newRentRequest.save();
 
-    // Add the new rent request ID to the student's sentRequests array
+    // Add the new rent request ID
     await StudentProfile.findByIdAndUpdate(studentId, {
       $push: { sentRequests: savedRequest._id },
     });
 
     // Update the landlord's profile with the new rent request ID
     const landlordProfile = await LandlordProfile.findOneAndUpdate(
-      { listings: listingId }, // Find the landlord profile associated with the listing
-      { $push: { rentRequests: savedRequest._id } }, // Add the rent request to the profile
+      { listings: listingId },
+      { $push: { rentRequests: savedRequest._id } },
       { new: true }
     );
 

@@ -10,6 +10,7 @@ export const userSlice = createSlice({
   reducers: {
     setUser(state, action) {
       state.user = action.payload;
+      console.log("after signin", state.user);
     },
     setEditing(state, action) {
       console.log(action.payload);

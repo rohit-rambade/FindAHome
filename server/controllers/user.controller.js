@@ -8,6 +8,7 @@ import {
 } from "../utils/validations/userValidations.js";
 import { StudentProfile } from "../models/student.model.js";
 import { LandlordProfile } from "../models/landlord.model.js";
+import { Listing } from "../models/listing.model.js";
 
 const signUp = async (req, res) => {
   try {
@@ -90,8 +91,12 @@ const signIn = async (req, res) => {
         .populate({
           path: "details",
           model: "LandlordProfile",
+          populate: {
+            path: "listings",
+            model: "Listing",
+          },
         });
-    } /* else populate other profile */
+    }
 
     const options = {
       httpOnly: true,

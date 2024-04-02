@@ -25,10 +25,10 @@ const listingSchema = new Schema({
   },
   rent: {
     type: Number,
-    rentType: {
-      type: String,
-      enum: ["Monthly", "Based on days", "Weekly"],
-    },
+  },
+  rentType: {
+    type: String,
+    enum: ["Monthly", "Based on days", "Weekly"],
   },
   washroomSystem: {
     type: String,

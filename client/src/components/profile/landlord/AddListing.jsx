@@ -12,10 +12,8 @@ const AddListing = () => {
     nearbyPublicTransportation: false,
     roomType: "",
     genderPreferences: "",
-    rent: {
-      amount: 0,
-      rentType: "",
-    },
+    rent: 0,
+    rentType: "",
     washroomSystem: "",
     cookingFacility: {
       inductionAllowed: false,
@@ -248,8 +246,8 @@ const AddListing = () => {
             <input
               id="rentAmount"
               type="text"
-              name="rent.amount"
-              value={formData.rent.amount}
+              name="rent"
+              value={formData.rent}
               onChange={handleChange}
               placeholder="Rent Amount"
               className="border border-gray-300 rounded-md p-2 w-full"
@@ -258,8 +256,8 @@ const AddListing = () => {
 
           {/* Rent Type */}
           <select
-            name="rent.rentType"
-            value={formData.rent.rentType}
+            name="rentType"
+            value={formData.rentType}
             onChange={handleChange}
             className="border border-gray-300 rounded-md p-2 w-full"
           >

@@ -8,6 +8,7 @@ import Listings from "../components/profile/landlord/Listings";
 import UserProfile from "../components/profile/UserProfile";
 import AddListing from "../components/profile/landlord/AddListing";
 import AllListings from "../pages/AllListings";
+import SingleListing from "../pages/SingleListing";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "listings",
         element: <AllListings />,
+      },
+      {
+        path: "listing/:id",
+        element: <SingleListing />,
       },
     ],
   },

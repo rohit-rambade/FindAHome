@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setTokens } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import { setUser } from "../slices/userSlice";
 const initialState = {
   email: "",
   password: "",
@@ -27,7 +28,15 @@ const SignIn = () => {
           "Content-Type": "application/json",
         },
       });
-      const { accessToken, refreshToken, success, message } = data;
+      console.log(data);
+      const {
+        accessToken,
+        refreshToken,
+        success,
+        message,
+        data: userdata,
+      } = data;
+      dispatch(setUser(userdata));
       dispatch(setTokens({ accessToken, refreshToken }));
       console.log(message);
       if (success) {
