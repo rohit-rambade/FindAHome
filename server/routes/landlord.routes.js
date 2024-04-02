@@ -5,6 +5,7 @@ import {
   deleteListing,
   getListingsForLandlord,
   markPaymentAsPaid,
+  receivedListings,
   updateListing,
   verifyAndAcceptRequest,
 } from "../controllers/landlord.controller.js";
@@ -34,4 +35,5 @@ router
   .route("/rent-request/:requestId/mark-payment-paid")
   .put(auth, markPaymentAsPaid);
 
+router.route("/received-requests").get(auth, receivedListings);
 export default router;

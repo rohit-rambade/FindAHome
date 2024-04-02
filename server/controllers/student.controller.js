@@ -21,7 +21,6 @@ const createRentRequest = async (req, res) => {
         .json({ success: false, message: "Listing not found" });
     }
 
-    // Check if the student has already sent a request for this listing
     const existingRequest = await RentRequest.findOne({
       student: studentId,
       listing: listingId,
@@ -35,21 +34,20 @@ const createRentRequest = async (req, res) => {
     const newRentRequest = new RentRequest({
       student: studentId,
       listing: listingId,
-      status: "Pending", // Set initial status as Pending
-      message: message || "", // Include the message if provided
-      additionalDetails: additionalDetails || "", // Include additional details if provided
+      status: "Pending",
+      message: message || "",
+      additionalDetails: additionalDetails || "",
     });
 
     const savedRequest = await newRentRequest.save();
 
-    // Add the new rent request ID to the student's sentRequests array
+    //new rent request ID to the student's
     await StudentProfile.findByIdAndUpdate(profileId, {
       $push: { sentRequests: savedRequest._id },
     });
 
-    // Update the landlord's profile with the new rent request ID
     const landlordProfile = await LandlordProfile.findOneAndUpdate(
-      { listings: listingId }, // Find the landlord profile associated with the listing
+      { listings: listingId },
       { $push: { rentRequests: savedRequest._id } }, // Add the rent request to the profile
       { new: true }
     );
@@ -60,4 +58,25 @@ const createRentRequest = async (req, res) => {
   }
 };
 
-export { createRentRequest };
+const viewsentRequests = async (req, res) => {
+  try {
+    const { id } = req.user;
+    console.log(id);
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const rentRequests = await RentRequest.find({ student: id });
+    console.log(rentRequests);
+    res.status(200).json({ success: true, data: rentRequests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export { createRentRequest, viewsentRequests };

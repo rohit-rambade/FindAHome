@@ -8,8 +8,8 @@ const RefreshToken = () => {
     try {
       const response = await axios.post(
         "/api/users/refresh-token",
-        { refreshToken: refreshToken /* Your refresh token value */ },
-        { withCredentials: true } // Include credentials in the request
+        { refreshToken: refreshToken },
+        { withCredentials: true }
       );
 
       console.log(response.data);

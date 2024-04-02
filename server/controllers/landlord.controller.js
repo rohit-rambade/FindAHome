@@ -191,7 +191,41 @@ const markPaymentAsPaid = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+const receivedListings = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User Not Found" });
+    }
 
+    console.log(user.details);
+
+    const landlordProfile = await LandlordProfile.findOne({
+      _id: user.details,
+    }).populate({
+      path: "rentRequests",
+      model: "RentRequest",
+    });
+
+    console.log(landlordProfile);
+
+    if (!landlordProfile) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Landlord profile not found" });
+    }
+
+    const requests = landlordProfile.rentRequests;
+
+    res.status(200).json({ success: true, data: requests });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
 export {
   createListing,
   updateListing,
@@ -199,4 +233,5 @@ export {
   getListingsForLandlord,
   verifyAndAcceptRequest,
   markPaymentAsPaid,
+  receivedListings,
 };
