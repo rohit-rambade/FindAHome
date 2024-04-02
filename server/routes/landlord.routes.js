@@ -8,11 +8,19 @@ import {
   updateListing,
   verifyAndAcceptRequest,
 } from "../controllers/landlord.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.route("/create-listing").post(auth, createListing);
-
+router
+  .route("/create-listing")
+  .post(auth, upload.array("images"), createListing);
+router.route("/test").post(upload.array("images"), (req, res) => {
+  console.log(req.files);
+  res.json({
+    msg: "hello",
+  });
+});
 router.route("/update-listing/:listingId").post(auth, updateListing);
 router.route("/delete-listing").delete(auth, deleteListing);
 

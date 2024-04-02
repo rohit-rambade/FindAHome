@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import MultiStep from "react-multistep";
+// import MultiStep from "react-multistep";
+// import { addListing } from "../../../slices/landlordSlice";
+// import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const AddListing = () => {
   const [formData, setFormData] = useState({
@@ -31,6 +34,8 @@ const AddListing = () => {
     rating: 0,
     reviews: [],
   });
+
+  // const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -101,47 +106,45 @@ const AddListing = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(addListing(formData));
-    // Reset form after submission
-    setFormData({
-      images: [],
-      location: "",
-      proximityToCampus: 0,
-      nearbyPublicTransportation: false,
-      roomType: "",
-      genderPreferences: "",
-      rent: {
-        amount: 0,
-        rentType: "",
-      },
-      washroomSystem: "",
-      cookingFacility: {
-        inductionAllowed: false,
-      },
-      occupancy: 4,
-      amenities: {
-        withBed: false,
-        furniture: "",
-      },
-      leaseDuration: "",
-      roomDescription: {
-        size: "",
-        windowsAndNaturalLight: false,
-        flooringType: "",
-      },
-      rating: 0,
-      reviews: [],
-    });
-  };
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const urls = files.map((file) => URL.createObjectURL(file));
-    setFormData({
-      ...formData,
-      images: urls,
-    });
+    const files = e.target.files;
+    setFormData({ ...formData, images: files });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formDataObj = new FormData();
+    for (let key in formData) {
+      if (key === "images") {
+        for (let i = 0; i < formData.images.length; i++) {
+          formDataObj.append("images", formData.images[i]);
+        }
+      } else if (typeof formData[key] === "object") {
+        for (let nestedKey in formData[key]) {
+          formDataObj.append(`${key}.${nestedKey}`, formData[key][nestedKey]);
+        }
+      } else {
+        formDataObj.append(key, formData[key]);
+      }
+    }
+
+    try {
+      const response = await axios.post(
+        "/api/landlord/create-listing",
+        formDataObj,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      // dispatch(addListing(response.data));
+      setFormData({ ...formData, images: [] });
+    } catch (error) {
+      console.error("Error adding listing:", error);
+    }
   };
   console.log(formData);
   return (

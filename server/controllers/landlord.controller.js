@@ -3,6 +3,7 @@ import { LandlordProfile } from "../models/landlord.model.js";
 import { Listing } from "../models/listing.model.js";
 import RentRequest from "../models/rentRequest.model.js";
 import User from "../models/user.model.js";
+import fs from "fs";
 
 const createListing = async (req, res) => {
   const { id } = req.user; // Assuming req.user contains the user ID
@@ -26,13 +27,15 @@ const createListing = async (req, res) => {
     const { images } = req.body;
     const uploadedImages = [];
 
-    // Loop through each image URL
-    for (const imageUrl of images) {
-      const uploadOptions = { folder: "SHF" }; // Customize folder name if needed
-
-      // Use cloudinary.uploader.upload to upload the image directly from the URL
-      const result = await cloudinary.uploader.upload(imageUrl, uploadOptions);
+    // Loop through each image file
+    for (const file of req.files) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "SHF",
+      });
       uploadedImages.push(result.secure_url);
+
+      // Remove the uploaded file from the server after uploading to Cloudinary
+      fs.unlinkSync(file.path);
     }
 
     const newListingData = {
