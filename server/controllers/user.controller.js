@@ -84,6 +84,10 @@ const signIn = async (req, res) => {
         .populate({
           path: "details",
           model: "StudentProfile",
+          populate: {
+            path: "sentRequests",
+            model: "RentRequest",
+          },
         });
     } else if (userExists.role === "landlord") {
       loggedInUser = await User.findById(userExists._id)

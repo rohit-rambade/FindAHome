@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const rentRequestSchema = new Schema({
   student: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "StudentProfile",
+    ref: "User",
     required: true,
   }, // Reference to student profile
   listing: {
