@@ -70,7 +70,19 @@ const viewsentRequests = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    const rentRequests = await RentRequest.find({ student: id });
+    const rentRequests = await RentRequest.find({ student: id }).populate({
+      path: "listing",
+      populate: {
+        path: "landlord",
+        model: "User",
+        select: "details",
+        populate: {
+          path: "details",
+          model: "LandlordProfile",
+          select: "fullName phone address photo",
+        },
+      },
+    });
     console.log(rentRequests);
     res.status(200).json({ success: true, data: rentRequests });
   } catch (error) {

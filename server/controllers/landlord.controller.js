@@ -191,7 +191,7 @@ const markPaymentAsPaid = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-const receivedListings = async (req, res) => {
+const receivedRequests = async (req, res) => {
   try {
     const { id } = req.user;
     const user = await User.findById(id);
@@ -208,6 +208,15 @@ const receivedListings = async (req, res) => {
     }).populate({
       path: "rentRequests",
       model: "RentRequest",
+      populate: {
+        path: "student",
+        select: "details",
+        populate: {
+          path: "details",
+          model: "StudentProfile",
+          select: "",
+        },
+      },
     });
 
     console.log(landlordProfile);
@@ -233,5 +242,5 @@ export {
   getListingsForLandlord,
   verifyAndAcceptRequest,
   markPaymentAsPaid,
-  receivedListings,
+  receivedRequests,
 };

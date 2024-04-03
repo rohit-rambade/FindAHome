@@ -10,6 +10,7 @@ import AddListing from "../components/profile/landlord/AddListing";
 import AllListings from "../pages/AllListings";
 import SingleListing from "../pages/SingleListing";
 import SentRequests from "../components/profile/student/SentRequests";
+import ViewReceivedRequests from "../components/profile/landlord/ViewReceivedRequests";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
             path: "sent-requests",
             element: <SentRequests />,
           },
+          { path: "received-requests", element: <ViewReceivedRequests /> },
         ],
       },
       {

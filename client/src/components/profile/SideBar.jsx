@@ -8,9 +8,9 @@ const SideBar = () => {
   console.log(role);
   return (
     <div>
-      <aside class=" md:w-64 lg:h-screen">
-        <div class="h-full px-3 py-4 overflow-y-auto ">
-          <ul class="flex flex-wrap justify-center items-center md:items-start md:flex-col md:space-y-2 font-medium">
+      <aside className=" md:w-64 lg:h-screen">
+        <div className="h-full px-3 py-4 overflow-y-auto ">
+          <ul className="flex flex-wrap justify-center items-center md:items-start md:flex-col md:space-y-2 font-medium">
             <li>
               <Link
                 to="/profile"
@@ -33,11 +33,22 @@ const SideBar = () => {
             ) : (
               <li>
                 <Link
+                  to="received-requests"
+                  className="flex items-center p-2 rounded-lg space-x-2"
+                >
+                  <FaHome />
+                  <span>Received Requests</span>
+                </Link>
+              </li>
+            )}
+            {role === "landlord" && (
+              <li>
+                <Link
                   to="listings"
                   className="flex items-center p-2 rounded-lg space-x-2"
                 >
                   <FaHome />
-                  <span>Listings</span>
+                  <span>listings</span>
                 </Link>
               </li>
             )}
