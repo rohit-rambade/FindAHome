@@ -70,6 +70,8 @@ const studentProfileSchema = new Schema({
       ref: "RentRequest",
     },
   ],
+
+  rentedHomes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
 });
 
 export const StudentProfile = mongoose.model(

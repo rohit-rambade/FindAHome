@@ -11,6 +11,8 @@ import AllListings from "../pages/AllListings";
 import SingleListing from "../pages/SingleListing";
 import SentRequests from "../components/profile/student/SentRequests";
 import ViewReceivedRequests from "../components/profile/landlord/ViewReceivedRequests";
+import Success from "../components/Success";
+import Cancel from "../components/Cancel";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
       {
         path: "listing/:id",
         element: <SingleListing />,
+      },
+      {
+        path: "success",
+        element: <Success />,
+      },
+      {
+        path: "cancel",
+        element: <Cancel />,
       },
     ],
   },
