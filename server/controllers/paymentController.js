@@ -62,9 +62,6 @@ const razorpayOrder = async (req, res) => {
   try {
     const { amount, currency, receipt } = req.body;
 
-    // Convert amount to integer (assuming amount is in paisa for INR)
-    // const amountInPaisa = parseInt(amount) * 100;
-
     const options = {
       amount: Number(amount) * 100,
       currency,
@@ -84,46 +81,31 @@ const razorpayOrder = async (req, res) => {
 };
 
 const paymentVerification = async (req, res) => {
-  console.log(req.body);
-  res.status(200).json({ success: true });
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+
+  console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature);
+
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+  const expectedSignature = crypto
+    .createHmac("sha256", "8B7ZyICbBuLYgHCRBF6DLkEq")
+    .update(body.toString())
+    .digest("hex");
+
+  const isAuthentic = expectedSignature === razorpay_signature;
+  console.log(isAuthentic);
+  if (isAuthentic) {
+    res.json({
+      message: "Transaction is Verified",
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+    });
+  } else {
+    res.status(400).json({
+      success: false,
+    });
+  }
 };
-
-// const makePayment = async (req, res) => {
-//   const { requestId } = req.params;
-//   const { request } = req.body;
-
-//   try {
-//     const rentRequest = await RentRequest.findById(requestId).populate(
-//       "listing"
-//     );
-
-//     if (!rentRequest) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Rent request not found" });
-//     }
-
-//     const orderAmount = rentRequest.listing.rent * 100; // Amount in smallest currency unit (e.g., paisa for INR)
-
-//     const options = {
-//       amount: orderAmount,
-//       currency: "INR",
-//       receipt: "order_receipt", // You can customize this receipt ID as per your application's logic
-//       payment_capture: 1, // Automatically capture payment after successful authorization
-//     };
-
-//     // Create an order using Razorpay API
-//     const order = await razorpay.orders.create(options);
-
-//     res.json({
-//       orderId: order.id,
-//       orderAmount: order.amount,
-//       currency: order.currency,
-//     });
-//   } catch (error) {
-//     console.error("Error creating Razorpay order:", error);
-//     res.status(500).json({ success: false, message: "Internal server error" });
-//   }
-// };
 
 export { razorpayOrder, paymentVerification };

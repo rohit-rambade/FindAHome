@@ -60,10 +60,26 @@ const SentRequests = () => {
         name: "SHF",
         description: "Test Transaction",
         order_id: order.id,
-        handler: function (response) {
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature);
+        handler: async function (response) {
+          console.log(response);
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
+          console.log(
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+          );
+
+          const validateResponse = await axios.post(
+            "/api/student/payment-verification",
+            {
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature,
+            },
+            { withCredentials: true }
+          );
+          console.log("after validation", validateResponse);
         },
 
         theme: {
