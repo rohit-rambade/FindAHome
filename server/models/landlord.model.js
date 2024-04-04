@@ -25,6 +25,18 @@ const landlordProfileSchema = new Schema({
       ref: "RentRequest",
     },
   ],
+  rentedListings: [
+    {
+      listingId: {
+        type: Schema.Types.ObjectId,
+        ref: "Listing",
+      },
+      student: {
+        type: Schema.Types.ObjectId,
+        ref: "StudentProfile",
+      },
+    },
+  ],
 });
 
 export const LandlordProfile = mongoose.model(

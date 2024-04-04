@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const SentRequests = () => {
   const [sentRequests, setSentRequests] = useState([]);
   const { role } = useSelector((state) => state.user.user);
@@ -35,7 +35,7 @@ const SentRequests = () => {
     return `receipt_${timestamp}_${randomString}`;
   };
 
-  const paymentHandler = async (id, amount) => {
+  const paymentHandler = async (listingId, landlordId, amount) => {
     try {
       const receiptId = generateReceiptId();
 
@@ -45,6 +45,7 @@ const SentRequests = () => {
           amount,
           currency: "INR",
           receipt: receiptId,
+          listingId,
         },
         { withCredentials: true }
       );
@@ -61,25 +62,34 @@ const SentRequests = () => {
         description: "Test Transaction",
         order_id: order.id,
         handler: async function (response) {
-          console.log(response);
-          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-            response;
-          console.log(
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
-          );
-
-          const validateResponse = await axios.post(
-            "/api/student/payment-verification",
-            {
+          try {
+            console.log(response);
+            const {
               razorpay_order_id,
               razorpay_payment_id,
               razorpay_signature,
-            },
-            { withCredentials: true }
-          );
-          console.log("after validation", validateResponse);
+            } = response;
+            console.log(
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature
+            );
+
+            const validateResponse = await axios.post(
+              "/api/student/payment-verification",
+              {
+                razorpay_order_id,
+                razorpay_payment_id,
+                razorpay_signature,
+                landlordId,
+                listingId,
+              },
+              { withCredentials: true }
+            );
+            toast.success(validateResponse.data.message);
+          } catch (error) {
+            toast.error(error.response.data.message || "An error occurred.");
+          }
         },
 
         theme: {
@@ -90,7 +100,7 @@ const SentRequests = () => {
       let rzp1 = new Razorpay(options);
       rzp1.open();
     } catch (error) {
-      console.error("Error processing payment:", error);
+      toast.error(error.response.data.message || "An error occurred.");
     }
   };
 
@@ -100,6 +110,7 @@ const SentRequests = () => {
       <div className="space-y-4">
         {sentRequests.map((request) => (
           <div key={request._id}>
+            {console.log(request.listing._id)}
             <Link to={`/listing/${request.listing}`}>
               <div className="border rounded-lg p-4">
                 <p className="text-sm">Status: {request.status}</p>
@@ -119,7 +130,11 @@ const SentRequests = () => {
                   type="button"
                   className="text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                   onClick={() =>
-                    paymentHandler(request._id, request?.listing?.rent)
+                    paymentHandler(
+                      request?.listing?._id,
+                      request?.listing?.landlord?._id,
+                      request?.listing?.rent
+                    )
                   }
                 >
                   Make A Payment
