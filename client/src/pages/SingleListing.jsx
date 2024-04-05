@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Map from "../components/map/Map";
 
 const SingleListing = () => {
   const { id } = useParams();
@@ -90,6 +91,9 @@ const SingleListing = () => {
                 Nearby Public Transport:{" "}
                 {listing.nearbyPublicTransportation ? "Yes" : "No"}
               </p>
+            </div>
+            <div className="mapContainer">
+              <Map items={listing} />
             </div>
             <div className="mt-8 max-w-md">
               <button

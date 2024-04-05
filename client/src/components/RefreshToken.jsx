@@ -21,7 +21,7 @@ const RefreshToken = () => {
   // Call refreshAccessToken function when the component mounts
   useEffect(() => {
     refreshAccessToken();
-  }, []);
+  }, [refreshToken]);
 
   return <div>Refreshing Access Token...</div>;
 };

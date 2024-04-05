@@ -111,19 +111,17 @@ const SentRequests = () => {
         {sentRequests.map((request) => (
           <div key={request._id}>
             {console.log(request.listing._id)}
-            <Link to={`/listing/${request.listing}`}>
-              <div className="border rounded-lg p-4">
-                <p className="text-sm">Status: {request.status}</p>
-                <p className="text-sm">
-                  Payment Status: {request.paymentStatus}
-                </p>
-                <p className="text-sm">Message: {request.message}</p>
-                <p className="text-sm">
-                  Additional Details: {request.additionalDetails}
-                </p>
-                <h1>Amount : {request?.listing?.rent}</h1>
-              </div>
-            </Link>
+
+            <div className="border rounded-lg p-4">
+              <p className="text-sm">Status: {request.status}</p>
+              <p className="text-sm">Payment Status: {request.paymentStatus}</p>
+              <p className="text-sm">Message: {request.message}</p>
+              <p className="text-sm">
+                Additional Details: {request.additionalDetails}
+              </p>
+              <h1>Amount : {request?.listing?.rent}</h1>
+            </div>
+
             <div>
               {role === "student" && request.status === "Approved" ? (
                 <button

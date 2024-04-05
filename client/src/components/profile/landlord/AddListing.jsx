@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // import { addListing } from "../../../slices/landlordSlice";
 // import { useDispatch } from "react-redux";
 import axios from "axios";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const AddListing = () => {
   const [formData, setFormData] = useState({
@@ -33,8 +34,12 @@ const AddListing = () => {
     reviews: [],
   });
 
+  const [location, setLocation] = useState({ lat: 51.505, lng: -0.09 }); // Default location (London)
+  const [selectedLocation, setSelectedLocation] = useState(null);
   // const dispatch = useDispatch();
-
+  const handleMapClick = (e) => {
+    setSelectedLocation(e.latlng);
+  };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -168,16 +173,20 @@ const AddListing = () => {
           {/* Location */}
 
           <div>
-            <label htmlFor="location">Location</label>
-            <input
-              id="location"
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              placeholder="Location"
-              className="border border-gray-300 rounded-md p-2 w-full"
-            />
+            <h3>Location Picker</h3>
+            <MapContainer
+              center={location}
+              zoom={13}
+              style={{ height: "400px", width: "100%" }}
+              onClick={handleMapClick}
+            >
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              {selectedLocation && (
+                <Marker position={selectedLocation}>
+                  <Popup>Your selected location</Popup>
+                </Marker>
+              )}
+            </MapContainer>
           </div>
 
           {/* Proximity to Campus */}
