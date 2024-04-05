@@ -52,10 +52,7 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
-  fieldOfStudy: {
-    type: String,
-    required: true,
-  },
+
   branch: {
     type: String,
     required: true,

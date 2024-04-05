@@ -9,10 +9,10 @@ const landlordProfileSchema = new Schema({
   roomTypes: [
     {
       type: String,
-      enum: ["Single Room", "Shared Room"],
+      enum: ["Single Room", "Shared Room", "Double Room"],
     },
   ],
-  amenities: [{ type: String, enum: ["Hot Water", "Tiffin", "Internet"] }],
+  amenities: [{ type: String, enum: ["Hot Water", "Tiffin", "Wi-Fi"] }],
   listings: [
     {
       type: Schema.Types.ObjectId,
