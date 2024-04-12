@@ -33,12 +33,12 @@ const Listings = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col">
       {user && user.role === "landlord" && (
         <>
-          <h2>Your Listings</h2>
+          <h2 className="text-4xl font-poppins p-5">My Listings</h2>
           {listings?.length > 0 && (
-            <ul>
+            <ul className="flex">
               {listings?.map((listing) => (
                 <div
                   key={listing._id} // Assuming each listing has a unique ID
@@ -67,12 +67,12 @@ const Listings = () => {
                         {listing.rent} Rs. /month
                       </p>
                     </div>
-                    <button
+                    {/* <button
                       onClick={() => handleEditClick(listing._id)}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Edit
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               ))}

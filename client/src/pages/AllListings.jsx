@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setListings } from "../slices/listingsSlice";
+import Map from "../components/map/Map";
 
 const AllListings = () => {
   const listings = useSelector((state) => state.listings.listings);
@@ -13,6 +14,7 @@ const AllListings = () => {
     maxRent: Infinity,
     amenities: "",
     proximityToCampus: "",
+    location: "",
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -36,13 +38,14 @@ const AllListings = () => {
     const meetsProximity =
       !filters.proximityToCampus ||
       listing.proximityToCampus <= parseInt(filters.proximityToCampus);
+    const meetsLocation =
+      !filters.location || listing.location === filters.location; // Check location filter
 
-    return meetsRoomType && meetsRent && meetsProximity;
+    return meetsRoomType && meetsRent && meetsProximity && meetsLocation;
   });
   return (
-    <div>
-      <div className="filter-container">
-        <h2>Filter Listings</h2>
+    <div className="font-poppins flex">
+      <div className="text-xl p-5 w-fit flex flex-col gap-y-6">
         <div>
           <label htmlFor="roomType">Room Type:</label>
           <select
@@ -100,39 +103,54 @@ const AllListings = () => {
             <option value="10">Within 10 miles</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            value={filters.location}
+            onChange={(e) =>
+              setFilters({ ...filters, location: e.target.value })
+            }
+          />
+        </div>
       </div>
-
-      <div className="flex flex-wrap justify-center">
-        {filteredListings?.map((listing) => (
-          <Link to={`/listing/${listing._id}`} key={listing._id}>
-            <div className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-xl m-4">
-              <img
-                className="w-full"
-                src={listing.images[0]}
-                alt="Property Image"
-              />
-              <div className="px-6 py-4">
-                <div className="mb-2">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    {listing.roomType} Room in {listing.location}
-                  </h2>
-                </div>
-                <div className="flex justify-between">
-                  <div className="flex items-center">
-                    <p className="ml-2 text-sm font-medium text-gray-700">
-                      {listing.roomDescription.size} sq ft
+      <div className="w-full">
+        <div>
+          <Map listings={listings} />
+        </div>
+        <div className="flex flex-wrap justify-center">
+          {filteredListings?.map((listing) => (
+            <Link to={`/listing/${listing._id}`} key={listing._id}>
+              <div className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-xl m-4">
+                <img
+                  className="w-full"
+                  src={listing.images[0]}
+                  alt="Property Image"
+                />
+                <div className="px-6 py-4">
+                  <div className="mb-2">
+                    <h2 className="text-xl font-bold text-gray-900">
+                      {listing.roomType} Room in {listing?.location}
+                    </h2>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="flex items-center">
+                      <p className="ml-2 text-sm font-medium text-gray-700">
+                        {listing.roomDescription.size} sq ft
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-3xl font-extrabold text-blue-800">
+                      {listing.rent}Rs. /month
                     </p>
                   </div>
                 </div>
-                <div className="mt-4">
-                  <p className="text-3xl font-extrabold text-blue-800">
-                    {listing.rent}Rs. /month
-                  </p>
-                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

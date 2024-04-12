@@ -38,8 +38,8 @@ const LandlordProfile = ({ details }) => {
             })}
           </ul>
         </div>
-        <h2 className="text-xl font-bold mt-6 mb-4">Listings</h2>
-        <div>
+
+        {/* <div>
           {details?.listings?.map((listing) => (
             <div
               key={listing._id} // Assuming each listing has a unique ID
@@ -77,7 +77,7 @@ const LandlordProfile = ({ details }) => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

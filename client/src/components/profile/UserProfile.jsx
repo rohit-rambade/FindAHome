@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import EditProfileLandlord from "./landlord/EditProfile";
 import EditProfileStudent from "./student/EditProfile";
 import StudentProfile from "./student/StudentProfile";
+import Listings from "./landlord/Listings";
 
 const UserProfile = () => {
   const { role, details } = useSelector((state) => state.user.user);
@@ -16,16 +17,20 @@ const UserProfile = () => {
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto ">
-        <div className="flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4">
+        <div className="">
           <div className=" ">
-            <div className="bg-white shadow rounded-lg p-6">
-              <div className="flex justify-end">
-                <FaEdit size={25} color="blue" onClick={toggleEditPopup} />
-              </div>
+            <div className="bg-white shadow rounded-lg p-6 flex justify-around">
               <div className=" bg-white shadow rounded-lg p-6">
+                <div className="flex justify-end">
+                  <FaEdit size={25} color="blue" onClick={toggleEditPopup} />
+                </div>
                 <div className="flex flex-col items-center">
                   <img
-                    src="https://randomuser.me/api/portraits/men/94.jpg"
+                    src={`${
+                      role == "student"
+                        ? "https://avatar.iran.liara.run/public/22"
+                        : "https://avatar.iran.liara.run/public/1"
+                    }`}
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   ></img>
                   <h1 className="text-xl font-bold">{details?.fullName}</h1>
@@ -47,6 +52,7 @@ const UserProfile = () => {
                 <StudentProfile details={details} />
               )}
             </div>
+            {role === "landlord" ? <Listings /> : ""}
           </div>
         </div>
       </div>

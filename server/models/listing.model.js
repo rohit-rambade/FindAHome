@@ -6,7 +6,12 @@ const listingSchema = new Schema({
     ref: "LandlordProfile",
   },
   images: [String],
-  location: String,
+  // location: String,
+  coordinates: {
+    type: [Number],
+    index: "2dsphere",
+    default: [null, null],
+  },
   proximityToCampus: Number,
   nearbyPublicTransportation: Boolean,
   roomType: {
@@ -55,5 +60,6 @@ const listingSchema = new Schema({
     flooringType: String,
   },
 });
+listingSchema.index({ coordinates: "2dsphere" });
 
 export const Listing = mongoose.model("Listing", listingSchema);

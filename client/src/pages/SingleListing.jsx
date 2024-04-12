@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Map from "../components/map/Map";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import Pin from "../components/pin/Pin";
 
 const SingleListing = () => {
   const { id } = useParams();
@@ -93,7 +95,30 @@ const SingleListing = () => {
               </p>
             </div>
             <div className="mapContainer">
-              <Map items={listing} />
+              <MapContainer
+                center={listing.coordinates}
+                zoom={7}
+                scrollWheelZoom={true}
+                className="h-96"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+
+                <Marker position={listing.coordinates}>
+                  <Popup>
+                    <div className="popupContainer">
+                      <img src={listing.images[0]} alt="" />
+                      <div className="textContainer">
+                        {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
+                        <span> {listing.landlord}</span>
+                        <b>{listing.rent} Rs</b>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              </MapContainer>
             </div>
             <div className="mt-8 max-w-md">
               <button

@@ -14,9 +14,13 @@ const Profile = () => {
   //   dispatch(setEditing(true));
   // };
   return (
-    <div className=" flex flex-col md:flex-row">
-      <SideBar />
-      <Outlet />
+    <div className="flex flex-col md:flex-row">
+      <div>
+        <SideBar />
+      </div>
+      <div className="w-full">
+        <Outlet />
+      </div>
     </div>
   );
 };

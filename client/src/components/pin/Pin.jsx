@@ -1,21 +1,30 @@
 import { Marker, Popup } from "react-leaflet";
+import { useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
 
-function Pin({ item }) {
+function Pin() {
+  const listings = useSelector((state) => state.listings.listings);
+  console.log(listings);
   return (
-    <Marker position={[16.28551111, 73.68446111]}>
-      <Popup>
-        <div className="popupContainer">
-          {/* <img src={item.images[0]} alt="" /> */}
-          <div className="textContainer">
-            {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
-            <span> bedroom</span>
-            <b>$ test</b>
-          </div>
-        </div>
-      </Popup>
-    </Marker>
+    <>
+      {listings.map((listing) => {
+        return (
+          <Marker position={listing.coordinates}>
+            <Popup>
+              <div className="popupContainer">
+                <img src={listing.images[0]} alt="" />
+                <div className="textContainer">
+                  {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
+                  <span> {listing.landlord}</span>
+                  <b>{listing.rent} Rs</b>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
+    </>
   );
 }
 

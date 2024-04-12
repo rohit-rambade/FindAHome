@@ -3,12 +3,13 @@ import React, { useState } from "react";
 // import { addListing } from "../../../slices/landlordSlice";
 // import { useDispatch } from "react-redux";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import GoogleMapReact from "google-map-react";
 
 const AddListing = () => {
   const [formData, setFormData] = useState({
     images: [],
-    location: "",
+    // location: "",
+    coordinates: [16.1658, 73.6589],
     proximityToCampus: 0,
     nearbyPublicTransportation: false,
     roomType: "",
@@ -36,10 +37,17 @@ const AddListing = () => {
 
   const [location, setLocation] = useState({ lat: 51.505, lng: -0.09 }); // Default location (London)
   const [selectedLocation, setSelectedLocation] = useState(null);
+
   // const dispatch = useDispatch();
   const handleMapClick = (e) => {
-    setSelectedLocation(e.latlng);
+    setSelectedLocation([e.lat, e.lng]);
+    const { lat, lng } = e;
+    setFormData({
+      ...formData,
+      coordinates: [lat, lng], // Update location as an array [lat, lng]
+    });
   };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -172,21 +180,23 @@ const AddListing = () => {
           </div>
           {/* Location */}
 
-          <div>
-            <h3>Location Picker</h3>
-            <MapContainer
-              center={location}
-              zoom={13}
-              style={{ height: "400px", width: "100%" }}
+          <div style={{ height: "400px", width: "100%" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyAaR2u6DhxyduuiZz85bIIeKlIm0Yd4v4c",
+              }}
+              defaultCenter={{ lat: 16.1668, lng: 73.5594 }}
+              defaultZoom={13}
               onClick={handleMapClick}
             >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              {selectedLocation && (
-                <Marker position={selectedLocation}>
-                  <Popup>Your selected location</Popup>
-                </Marker>
-              )}
-            </MapContainer>
+              {/* {selectedLocation && (
+                <Marker
+                  lat={selectedLocation[0]}
+                  lng={selectedLocation[1]}
+                  text="Your selected location"
+                />
+              )} */}
+            </GoogleMapReact>
           </div>
 
           {/* Proximity to Campus */}

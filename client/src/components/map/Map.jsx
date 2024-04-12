@@ -2,15 +2,12 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Pin from "../pin/Pin";
 
-function Map({ items }) {
+function Map({ listings }) {
+  console.log(listings);
   return (
     <MapContainer
-      center={
-        items.length === 1
-          ? [items[0].latitude, items[0].longitude]
-          : [16.28551111, 73.68446111]
-      }
-      zoom={7}
+      center={[16.28551111, 73.68446111]}
+      zoom={10}
       scrollWheelZoom={true}
       className="h-96"
     >
@@ -19,7 +16,7 @@ function Map({ items }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       Test Kankavli
-      <Pin items={items} />
+      <Pin listings={listings} />
     </MapContainer>
   );
 }
