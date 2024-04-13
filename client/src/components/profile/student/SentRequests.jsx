@@ -112,11 +112,37 @@ const SentRequests = () => {
           <div key={request._id}>
             {console.log(request.listing._id)}
 
-            <div className="border rounded-lg p-4">
-              <p className="text-sm">Status: {request.status}</p>
-              <p className="text-sm">Payment Status: {request.paymentStatus}</p>
-              <p className="text-sm">Message: {request.message}</p>
-              <p className="text-sm">
+            <div className="border rounded-lg p-4 text-2xl">
+              <p className="text-lg">
+                Status:
+                <span
+                  className={`${
+                    request.status === "Pending"
+                      ? "text-yellow-300"
+                      : request.status === "Approved"
+                      ? "text-green-400"
+                      : "text-red-400"
+                  }`}
+                >
+                  {request.status}
+                </span>
+              </p>
+              <p className="text-lg">
+                Payment Status:{" "}
+                <span
+                  className={`${
+                    request.paymentStatus === "Pending"
+                      ? "text-yellow-300"
+                      : request.paymentStatus === "Approved"
+                      ? "text-green-400"
+                      : "text-red-400"
+                  }`}
+                >
+                  {request.paymentStatus}
+                </span>
+              </p>
+              <p className="text-lg">Message: {request.message}</p>
+              <p className="text-lg">
                 Additional Details: {request.additionalDetails}
               </p>
               <h1>Amount : {request?.listing?.rent}</h1>

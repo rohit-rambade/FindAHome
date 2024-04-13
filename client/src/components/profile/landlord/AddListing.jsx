@@ -4,11 +4,11 @@ import React, { useState } from "react";
 // import { useDispatch } from "react-redux";
 import axios from "axios";
 import GoogleMapReact from "google-map-react";
-
+import { toast } from "react-toastify";
 const AddListing = () => {
   const [formData, setFormData] = useState({
     images: [],
-    // location: "",
+    city: "",
     coordinates: [16.1658, 73.6589],
     proximityToCampus: 0,
     nearbyPublicTransportation: false,
@@ -141,7 +141,7 @@ const AddListing = () => {
     }
 
     try {
-      const response = await axios.post(
+      const { data, status } = await axios.post(
         "/api/landlord/create-listing",
         formDataObj,
         {
@@ -151,10 +151,15 @@ const AddListing = () => {
           withCredentials: true,
         }
       );
+
       // dispatch(addListing(response.data));
       setFormData({ ...formData, images: [] });
+      toast.dismiss();
+      toast.success(data.message);
     } catch (error) {
       console.error("Error adding listing:", error);
+      toast.dismiss();
+      toast.error(error.response.data.message || "An error occurred.");
     }
   };
   console.log(formData);
@@ -179,7 +184,18 @@ const AddListing = () => {
             />
           </div>
           {/* Location */}
-
+          <div>
+            <label htmlFor="city">Location</label>
+            <input
+              id="city"
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              placeholder="Location"
+              className="border border-gray-300 rounded-md p-2 w-full"
+            />
+          </div>
           <div style={{ height: "400px", width: "100%" }}>
             <GoogleMapReact
               bootstrapURLKeys={{

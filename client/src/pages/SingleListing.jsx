@@ -86,7 +86,7 @@ const SingleListing = () => {
               <h3 className="text-lg font-bold text-gray-800">
                 About the Room
               </h3>
-              <p>Location: {listing.location}</p>
+              <p>Location: {listing.city}</p>
               <p>Occupancy: {listing.occupancy}</p>
               <p>Lease Duration: {listing.leaseDuration}</p>
               <p>
@@ -94,32 +94,36 @@ const SingleListing = () => {
                 {listing.nearbyPublicTransportation ? "Yes" : "No"}
               </p>
             </div>
-            <div className="mapContainer">
-              <MapContainer
-                center={listing.coordinates}
-                zoom={7}
-                scrollWheelZoom={true}
-                className="h-96"
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+            {!showPopup ? (
+              <div className="mapContainer">
+                <MapContainer
+                  center={listing.coordinates}
+                  zoom={7}
+                  scrollWheelZoom={true}
+                  className="h-96"
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
 
-                <Marker position={listing.coordinates}>
-                  <Popup>
-                    <div className="popupContainer">
-                      <img src={listing.images[0]} alt="" />
-                      <div className="textContainer">
-                        {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
-                        <span> {listing.landlord}</span>
-                        <b>{listing.rent} Rs</b>
+                  <Marker position={listing.coordinates}>
+                    <Popup>
+                      <div className="popupContainer">
+                        <img src={listing.images[0]} alt="" />
+                        <div className="textContainer">
+                          {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
+                          <span> {listing.landlord}</span>
+                          <b>{listing.rent} Rs</b>
+                        </div>
                       </div>
-                    </div>
-                  </Popup>
-                </Marker>
-              </MapContainer>
-            </div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+            ) : (
+              <></>
+            )}
             <div className="mt-8 max-w-md">
               <button
                 type="button"

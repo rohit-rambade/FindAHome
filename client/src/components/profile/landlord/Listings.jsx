@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setEditing } from "../../../slices/userSlice";
 import axios from "axios"; // Import Axios or your preferred HTTP library
-
+import { toast } from "react-toastify";
 const Listings = () => {
   const user = useSelector((state) => state.user.user);
 
@@ -28,8 +28,24 @@ const Listings = () => {
     }
   };
 
-  const handleEditClick = (listingId) => {
-    dispatch(setEditing(true));
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const { data, status } = await axios.delete(
+        "/api/landlord/delete-listing",
+        {
+          data: { listingId },
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+
+      toast.dismiss();
+      toast.success(data.message);
+      fetchListings();
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error.response.data.message || "An error occurred.");
+    }
   };
 
   return (
@@ -37,7 +53,12 @@ const Listings = () => {
       {user && user.role === "landlord" && (
         <>
           <h2 className="text-4xl font-poppins p-5">My Listings</h2>
-          {listings?.length > 0 && (
+
+          {listings?.length === 0 ? (
+            <div>
+              <h1 className=" text-2xl  p-5">No Listings Available</h1>
+            </div>
+          ) : (
             <ul className="flex">
               {listings?.map((listing) => (
                 <div
@@ -67,12 +88,12 @@ const Listings = () => {
                         {listing.rent} Rs. /month
                       </p>
                     </div>
-                    {/* <button
-                      onClick={() => handleEditClick(listing._id)}
+                    <button
+                      onClick={() => handleDeleteListing(listing._id)}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
-                      Edit
-                    </button> */}
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}

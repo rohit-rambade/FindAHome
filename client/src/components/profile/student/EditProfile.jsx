@@ -64,7 +64,7 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
         <h2 className="text-xl font-bold mb-4">
           {profileData ? "Edit Profile" : "Create Profile"}
         </h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-2">
           <input
             type="text"
             name="fullName"
@@ -74,15 +74,20 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             required
             className="w-full mb-4 p-2 border border-gray-300 rounded"
           />
-          <input
-            type="date"
-            name="dob"
-            value={details.dob}
-            onChange={handleChange}
-            placeholder="DOB"
-            required
-            className="w-full mb-4 p-2 border border-gray-300 rounded"
-          />
+          <div className="">
+            <label htmlFor="dob">DOB</label>
+            <input
+              type="date"
+              name="dob"
+              id="dob"
+              value={details.dob}
+              onChange={handleChange}
+              placeholder="DOB"
+              required
+              className="w-full mb-4 p-2 border border-gray-300 rounded"
+            />
+          </div>
+
           <div className="mb-4">
             <label
               htmlFor="gender"
@@ -112,7 +117,7 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             required
             className="w-full mb-4 p-2 border border-gray-300 rounded"
           />
-          <input
+          {/* <input
             type="text"
             name="aadharCard"
             value={details.aadharCard}
@@ -120,7 +125,7 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             placeholder="aadharCard"
             required
             className="w-full mb-4 p-2 border border-gray-300 rounded"
-          />
+          /> */}
           <input
             type="email"
             name="email"

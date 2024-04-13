@@ -18,10 +18,10 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
-  aadharCard: {
-    type: String,
-    required: true,
-  },
+  // aadharCard: {
+  //   type: String,
+  //   required: true,
+  // },
   email: {
     type: String,
     required: true,

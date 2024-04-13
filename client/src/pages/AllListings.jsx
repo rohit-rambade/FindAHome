@@ -14,7 +14,7 @@ const AllListings = () => {
     maxRent: Infinity,
     amenities: "",
     proximityToCampus: "",
-    location: "",
+    city: "",
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -39,8 +39,8 @@ const AllListings = () => {
       !filters.proximityToCampus ||
       listing.proximityToCampus <= parseInt(filters.proximityToCampus);
     const meetsLocation =
-      !filters.location || listing.location === filters.location; // Check location filter
-
+      !filters.city ||
+      listing.city.toLowerCase() === filters.city.toLowerCase();
     return meetsRoomType && meetsRent && meetsProximity && meetsLocation;
   });
   return (
@@ -108,10 +108,8 @@ const AllListings = () => {
           <input
             type="text"
             id="location"
-            value={filters.location}
-            onChange={(e) =>
-              setFilters({ ...filters, location: e.target.value })
-            }
+            value={filters.city}
+            onChange={(e) => setFilters({ ...filters, city: e.target.value })}
           />
         </div>
       </div>
@@ -131,7 +129,7 @@ const AllListings = () => {
                 <div className="px-6 py-4">
                   <div className="mb-2">
                     <h2 className="text-xl font-bold text-gray-900">
-                      {listing.roomType} Room in {listing?.location}
+                      {listing.roomType} Room in {listing?.city}
                     </h2>
                   </div>
                   <div className="flex justify-between">

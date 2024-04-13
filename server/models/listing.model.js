@@ -6,7 +6,7 @@ const listingSchema = new Schema({
     ref: "LandlordProfile",
   },
   images: [String],
-  // location: String,
+  city: String,
   coordinates: {
     type: [Number],
     index: "2dsphere",

@@ -186,7 +186,7 @@ const markPaymentAsPaid = async (req, res) => {
     rentRequest.paymentStatus = "Paid";
     await rentRequest.save();
 
-    res.status(200).json({ success: true, message: "Payment marked as paid" });
+    res.status(200).json({ success: true, message: "Payment Status Updated" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
