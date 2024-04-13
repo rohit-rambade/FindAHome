@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const ViewReceivedRequests = () => {
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [statusMap, setStatusMap] = useState({});
-
+  console.log(receivedRequests);
   useEffect(() => {
     const fetchReceivedRequests = async () => {
       try {
@@ -12,6 +12,7 @@ const ViewReceivedRequests = () => {
           withCredentials: true,
         });
         const { data } = response;
+        console.log(data);
         if (data.success) {
           setReceivedRequests(data.data);
 
@@ -94,11 +95,26 @@ const ViewReceivedRequests = () => {
           receivedRequests.map((request) => (
             <div
               key={request._id}
-              className="border rounded-lg p-4 flex   text-xl"
+              className="border rounded-lg p-4 flex justify-between text-xl "
             >
-              <div>
-                <p>Listing ID: {request.listing}</p>
-                <p>
+              <div className="">
+                <p className="font-bold">
+                  Listing ID:
+                  <span className="font-normal ml-3">{request.listing}</span>
+                </p>
+                <p className="font-bold">
+                  Name:
+                  <span className="font-normal ml-3">
+                    {request.student.details.fullName}
+                  </span>
+                </p>
+                <p className="font-bold">
+                  Phone Number:
+                  <span className="font-normal ml-3">
+                    {request.student.details.phone}
+                  </span>
+                </p>
+                <p className="font-bold">
                   Status:
                   <span
                     className={`${
@@ -107,51 +123,71 @@ const ViewReceivedRequests = () => {
                         : request.status === "Approved"
                         ? "text-green-400"
                         : "text-red-400"
-                    }`}
+                    } font-normal ml-3`}
                   >
                     {request.status}
                   </span>
                 </p>
-                <p className="text-lg">
-                  Payment Status:{" "}
+                <p className="text-lg font-bold">
+                  Payment Status:
                   <span
                     className={`${
                       request.paymentStatus === "Pending"
                         ? "text-yellow-300"
                         : "text-green-400"
-                    }`}
+                    } font-normal ml-3`}
                   >
                     {request.paymentStatus}
                   </span>
                 </p>
-                <p>Message: {request.message}</p>
-                <p>Additional Details: {request.additionalDetails}</p>
+                <p className="font-bold">
+                  Message:
+                  <span className="font-normal ml-3"> {request.message}</span>
+                </p>
+                <p className="font-bold">
+                  Additional Details:{" "}
+                  <span className="font-normal ml-3">
+                    {request.additionalDetails}
+                  </span>
+                </p>
               </div>
-              <div className="">
-                <div className="space-x-4">
-                  <label>Status:</label>
-                  <select
-                    value={statusMap[request._id] || ""}
-                    onChange={(e) => handleStatusChange(e, request._id)}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                  <button onClick={() => handleApproveRequest(request._id)}>
-                    Approve Request
-                  </button>
+              <div className="gap-x-5">
+                <div className="space-x-4 flex  ">
+                  <div className="space-x-4">
+                    <label>Status:</label>
+                    <select
+                      className="p-2 border border-black shadow-lg"
+                      value={statusMap[request._id] || ""}
+                      onChange={(e) => handleStatusChange(e, request._id)}
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button
+                      className="text-gray-900 bg-[#F7BE38] hover:bg-[#F7BE38]/90 focus:ring-4 focus:outline-none focus:ring-[#F7BE38]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#F7BE38]/50 me-2 mb-2"
+                      onClick={() => handleApproveRequest(request._id)}
+                    >
+                      Approve Request
+                    </button>
+                  </div>
                 </div>
                 <div className="space-x-4">
                   <label> Payment Status:</label>
                   <select
+                    className="p-2 border border-black shadow-lg"
                     value={statusMap[request._id] || ""}
                     onChange={(e) => handleStatusChange(e, request._id)}
                   >
                     <option value="Pending">Pending</option>
                     <option value="Paid">Paid</option>
                   </select>
-                  <button onClick={() => handlePaymentAsPaid(request._id)}>
+                  <button
+                    className="text-white bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium  rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#2557D6]/50 me-2 mb-2"
+                    onClick={() => handlePaymentAsPaid(request._id)}
+                  >
                     Accept Payment
                   </button>
                 </div>

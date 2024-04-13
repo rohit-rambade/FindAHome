@@ -23,7 +23,7 @@ const RefreshToken = () => {
     refreshAccessToken();
   }, [refreshToken]);
 
-  return <div>Refreshing Access Token...</div>;
+  return <></>;
 };
 
 export default RefreshToken;

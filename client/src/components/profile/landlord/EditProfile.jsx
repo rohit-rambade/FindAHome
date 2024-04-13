@@ -101,14 +101,14 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             required
             className="w-full mb-4 p-2 border border-gray-300 rounded"
           />
-          <input
+          {/* <input
             type="text"
             name="photo"
             value={details.photo}
             onChange={handleChange}
             placeholder="Photo"
             className="w-full mb-4 p-2 border border-gray-300 rounded"
-          />
+          /> */}
           <div className="mb-4">
             <label
               htmlFor="roomTypes"

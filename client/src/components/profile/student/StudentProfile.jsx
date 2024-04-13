@@ -2,8 +2,8 @@ import React from "react";
 
 const StudentProfile = ({ details }) => {
   return (
-    <div>
-      <div>
+    <div className="font-poppins space-y-4">
+      <div className="space-y-2">
         <h2 className="text-xl font-bold mb-4">About Me</h2>
         {/* <p className="text-gray-700">DOB : {details?.dob}</p> */}
         <p className="text-gray-700">Gender : {details?.gender}</p>
@@ -15,7 +15,7 @@ const StudentProfile = ({ details }) => {
         <p className="text-gray-700"> Branch : {details?.branch}</p>
         <p className="text-gray-700"> academicYear : {details?.academicYear}</p>
       </div>
-      <div>
+      <div className="space-y-2">
         <h2 className="text-xl font-bold mb-4">Address</h2>
         <p className="text-gray-700">{details?.address}</p>
 
@@ -24,13 +24,13 @@ const StudentProfile = ({ details }) => {
         <p className="text-gray-700">Pincode {details?.pincode}</p>
       </div>
 
-      <div>
+      <div className="space-y-2">
         <h2 className="text-xl font-bold mb-4">Additional Details</h2>
         <p className="text-gray-700">
-          parentContactNo : {details?.parentContactNo}
+          Parent Contact : {details?.parentContactNo}
         </p>
 
-        <p className="text-gray-700">hodContactNo : {details?.hodContactNo}</p>
+        <p className="text-gray-700">Hod Contact: {details?.hodContactNo}</p>
       </div>
     </div>
   );

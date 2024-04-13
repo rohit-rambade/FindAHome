@@ -68,6 +68,7 @@ const AllListings = () => {
         <div>
           <label htmlFor="minRent">Min Rent:</label>
           <input
+            className="border p-2 shadow"
             type="number"
             id="minRent"
             value={filters.minRent}
@@ -79,6 +80,7 @@ const AllListings = () => {
         <div>
           <label htmlFor="maxRent">Max Rent:</label>
           <input
+            className="border p-2"
             type="number"
             id="maxRent"
             value={filters.maxRent}
@@ -106,8 +108,10 @@ const AllListings = () => {
         <div>
           <label htmlFor="location">Location</label>
           <input
+            className="border p-2 shadow"
             type="text"
             id="location"
+            placeholder="Search City"
             value={filters.city}
             onChange={(e) => setFilters({ ...filters, city: e.target.value })}
           />

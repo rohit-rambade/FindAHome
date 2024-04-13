@@ -15,7 +15,7 @@ const SingleListing = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [additionalDetails, setAdditionalDetails] = useState("");
-  console.log(_id);
+  // console.log(_id);
   const handleSendRequest = async () => {
     try {
       if (role !== "student") {
