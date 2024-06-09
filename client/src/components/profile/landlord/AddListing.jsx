@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-// import MultiStep from "react-multistep";
-// import { addListing } from "../../../slices/landlordSlice";
-// import { useDispatch } from "react-redux";
 import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import { toast } from "react-toastify";

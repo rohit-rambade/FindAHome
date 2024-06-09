@@ -59,12 +59,18 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
   };
   console.log(details.fullName);
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <div
+      className="fixed inset-0 flex items-start md:icf
+     justify-center bg-gray-800 bg-opacity-50 z-50 overflow-scroll md:overflow-hidden"
+    >
       <div className="bg-white p-6 rounded-lg w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">
           {profileData ? "Edit Profile" : "Create Profile"}
         </h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-2">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-2"
+        >
           <input
             type="text"
             name="fullName"
@@ -72,7 +78,7 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             onChange={handleChange}
             placeholder="Full Name"
             required
-            className="w-full mb-4 p-2 border border-gray-300 rounded"
+            className="w-full mb-4 p-2 border border-gray-300 rounded md:col-span-2"
           />
           <div className="">
             <label htmlFor="dob">DOB</label>
@@ -101,7 +107,9 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
               value={details.gender}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded p-2"
+              required
             >
+              <option>Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -215,26 +223,28 @@ const EditProfile = ({ toggleEditPopup, profileData }) => {
             onChange={handleChange}
             placeholder="academicYear"
             required
-            className="w-full mb-4 p-2 border border-gray-300 rounded"
+            className="w-full mb-4 p-2 border border-gray-300 rounded col-span-1 "
           />
 
           {/* Add more input fields for other profile data */}
-          <div className="flex justify-end">
-            {profileData ? ( // Conditionally render Cancel button based on profileData presence
+          <div className="">
+            <div className="flex md:justify-end">
+              {profileData ? ( // Conditionally render Cancel button based on profileData presence
+                <button
+                  type="button"
+                  className="w-full bg-red-500 text-white py-2 px-4 rounded mr-2"
+                  onClick={toggleEditPopup}
+                >
+                  Cancel
+                </button>
+              ) : null}
               <button
-                type="button"
-                className="bg-red-500 text-white py-2 px-4 rounded mr-2"
-                onClick={toggleEditPopup}
+                type="submit"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
               >
-                Cancel
+                Save
               </button>
-            ) : null}
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-            >
-              Save
-            </button>
+            </div>
           </div>
         </form>
       </div>

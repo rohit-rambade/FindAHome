@@ -113,7 +113,7 @@ const SingleListing = () => {
                         <img src={listing.images[0]} alt="" />
                         <div className="textContainer">
                           {/* <Link to={`/${item.id}`}>{item.title}</Link> */}
-                          <span> {listing.landlord}</span>
+                          <span> {listing.city}</span>
                           <b>{listing.rent} Rs</b>
                         </div>
                       </div>

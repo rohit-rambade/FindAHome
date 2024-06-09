@@ -19,7 +19,7 @@ const UserProfile = () => {
       <div className="container mx-auto ">
         <div className="">
           <div className=" ">
-            <div className="bg-white shadow rounded-lg p-6 flex justify-around">
+            <div className="bg-white shadow rounded-lg p-6 flex flex-col md:flex-row justify-around">
               <div className=" bg-white shadow rounded-lg p-6">
                 <div className="flex justify-end">
                   <FaEdit size={25} color="blue" onClick={toggleEditPopup} />
@@ -31,7 +31,7 @@ const UserProfile = () => {
                         ? "https://avatar.iran.liara.run/public/22"
                         : "https://avatar.iran.liara.run/public/1"
                     }`}
-                    className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                    className="w-1/4 bg-gray-300 rounded-full mb-4 shrink-0"
                   ></img>
                   <h1 className="text-xl font-bold">{details?.fullName}</h1>
                   <p className="text-gray-700">{role}</p>
