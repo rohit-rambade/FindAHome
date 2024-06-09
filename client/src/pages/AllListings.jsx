@@ -1,72 +1,159 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setListings } from "../slices/listingsSlice";
+import Map from "../components/map/Map";
 
 const AllListings = () => {
+  const listings = useSelector((state) => state.listings.listings);
+  const dispatch = useDispatch();
+  const [filters, setFilters] = useState({
+    roomType: "",
+    minRent: 0,
+    maxRent: Infinity,
+    amenities: "",
+    proximityToCampus: "",
+    city: "",
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/listings");
+        dispatch(setListings(response.data.data));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+  console.log(listings);
+  const filteredListings = listings.filter((listing) => {
+    const meetsRoomType =
+      !filters.roomType || listing.roomType === filters.roomType;
+    const meetsRent =
+      listing.rent >= filters.minRent && listing.rent <= filters.maxRent;
+
+    const meetsProximity =
+      !filters.proximityToCampus ||
+      listing.proximityToCampus <= parseInt(filters.proximityToCampus);
+    const meetsLocation =
+      !filters.city ||
+      listing.city.toLowerCase() === filters.city.toLowerCase();
+    return meetsRoomType && meetsRent && meetsProximity && meetsLocation;
+  });
   return (
-    <div class="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-xl">
-      <img
-        class="w-full"
-        src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bW9kZXJuJTIwaG91c2V8ZW58MHx8MHx8&w=1000&q=80"
-        alt="Property Image"
-      />
-      <div class="px-6 py-4">
-        <div class="mb-2">
-          <h2 class="text-xl font-bold text-gray-900">
-            PG For Boys in Sukalwad
-          </h2>
-          {/* <div class="flex items-center">
-            <div class="mr-2 rounded-full bg-blue-600 py-1 px-2 text-xs font-medium text-white">
-              sf
-            </div>
-            <div class="rounded-full bg-yellow-500 py-1 px-2 text-xs font-medium text-white">
-              sdfsd
-            </div>
-          </div> */}
+    <div className="font-poppins flex">
+      <div className="text-xl p-5 w-fit flex flex-col gap-y-6">
+        <div>
+          <label htmlFor="roomType">Room Type:</label>
+          <select
+            id="roomType"
+            value={filters.roomType}
+            onChange={(e) =>
+              setFilters({ ...filters, roomType: e.target.value })
+            }
+          >
+            <option value="">Any</option>
+            <option value="Single">Single</option>
+            <option value="Double">Double</option>
+            <option value="Triple">Triple</option>
+            <option value="Common for 5 to 6 students">
+              Common for 5 to 6 students
+            </option>
+            <option value="Apartment">Apartment</option>
+          </select>
         </div>
-        <div class="flex justify-between">
-          <div class="flex items-center">
-            <img src="https://img.icons8.com/windows/24/null/bedroom.png" />
-            <p class="ml-2 text-sm font-medium text-gray-700">Shared</p>
-          </div>
-          <div class="flex items-center">
-            <img src="https://img.icons8.com/pastel-glyph/24/null/bath--v2.png" />
-            <p class="ml-2 text-sm font-medium text-gray-700">2 Bathrooms</p>
-          </div>
-          <div class="flex items-center">
-            <img src="https://img.icons8.com/ios-glyphs/24/null/expand--v1.png" />
-            <p class="ml-2 text-sm font-medium text-gray-700">120 sqm</p>
-          </div>
+        <div>
+          <label htmlFor="minRent">Min Rent:</label>
+          <input
+            className="border p-2 shadow"
+            type="number"
+            id="minRent"
+            value={filters.minRent}
+            onChange={(e) =>
+              setFilters({ ...filters, minRent: e.target.valueAsNumber })
+            }
+          />
         </div>
-        <div class="mt-4">
-          <p class="text-3xl font-extrabold text-blue-800">2400/month</p>
+        <div>
+          <label htmlFor="maxRent">Max Rent:</label>
+          <input
+            className="border p-2"
+            type="number"
+            id="maxRent"
+            value={filters.maxRent}
+            onChange={(e) =>
+              setFilters({ ...filters, maxRent: e.target.valueAsNumber })
+            }
+          />
+        </div>
+
+        <div>
+          <label htmlFor="proximityToCampus">Proximity to Campus:</label>
+          <select
+            id="proximityToCampus"
+            value={filters.proximityToCampus}
+            onChange={(e) =>
+              setFilters({ ...filters, proximityToCampus: e.target.value })
+            }
+          >
+            <option value="">Any</option>
+            <option value="1">Within 1 mile</option>
+            <option value="5">Within 5 miles</option>
+            <option value="10">Within 10 miles</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="location">Location</label>
+          <input
+            className="border p-2 shadow"
+            type="text"
+            id="location"
+            placeholder="Search City"
+            value={filters.city}
+            onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+          />
         </div>
       </div>
-      {/* <div class="px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center">
-          <img
-            src="https://via.placeholder.com/50"
-            alt="Agent Image"
-            class="mr-2 rounded-full object-cover"
-          />
-          <div>
-            <p class="text-sm font-medium text-gray-800">Agent Name</p>
-            <p class="text-xs text-gray-600">Real Estate Agent</p>
-          </div>
+      <div className="w-full">
+        <div>
+          <Map listings={listings} />
         </div>
-        <div class="flex">
-          <a
-            href="tel:+1234567890"
-            class="mr-2 rounded-full bg-gray-300 p-1 text-gray-700 hover:text-gray-800"
-          >
-            <img src="https://img.icons8.com/color/24/null/ringer-volume.png" />
-          </a>
-          <a
-            href="https://wa.me/1234567890"
-            class="rounded-full bg-green-500 p-1 text-white hover:bg-green-600"
-          >
-            <img src="https://img.icons8.com/external-those-icons-lineal-color-those-icons/24/null/external-WhatsApp-social-media-those-icons-lineal-color-those-icons.png" />
-          </a>
+        <div className="flex flex-wrap justify-center">
+          {filteredListings?.map((listing) => (
+            <Link to={`/listing/${listing._id}`} key={listing._id}>
+              <div className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-xl m-4">
+                <img
+                  className="w-full"
+                  src={listing.images[0]}
+                  alt="Property Image"
+                />
+                <div className="px-6 py-4">
+                  <div className="mb-2">
+                    <h2 className="text-xl font-bold text-gray-900">
+                      {listing.roomType} Room in {listing?.city}
+                    </h2>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="flex items-center">
+                      <p className="ml-2 text-sm font-medium text-gray-700">
+                        {listing.roomDescription.size} sq ft
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-3xl font-extrabold text-blue-800">
+                      {listing.rent}Rs. /month
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

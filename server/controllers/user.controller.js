@@ -8,6 +8,7 @@ import {
 } from "../utils/validations/userValidations.js";
 import { StudentProfile } from "../models/student.model.js";
 import { LandlordProfile } from "../models/landlord.model.js";
+import { Listing } from "../models/listing.model.js";
 
 const signUp = async (req, res) => {
   try {
@@ -83,6 +84,10 @@ const signIn = async (req, res) => {
         .populate({
           path: "details",
           model: "StudentProfile",
+          populate: {
+            path: "sentRequests",
+            model: "RentRequest",
+          },
         });
     } else if (userExists.role === "landlord") {
       loggedInUser = await User.findById(userExists._id)
@@ -90,8 +95,12 @@ const signIn = async (req, res) => {
         .populate({
           path: "details",
           model: "LandlordProfile",
+          populate: {
+            path: "listings",
+            model: "Listing",
+          },
         });
-    } /* else populate other profile */
+    }
 
     const options = {
       httpOnly: true,
@@ -200,7 +209,7 @@ const refreshAccessToken = async (req, res) => {
 
 const createProfile = async (req, res) => {
   // const { id } = req.user._id;
-
+  console.log(req.body);
   try {
     const { id } = req.user;
     // console.log(id, email, role);
@@ -264,5 +273,54 @@ const createProfile = async (req, res) => {
   // console.log(user.email);
   // res.json({ data: user });
 };
+const updateProfile = async (req, res) => {
+  const { id } = req.user;
 
-export { signUp, signIn, signOut, refreshAccessToken, createProfile };
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User Not Found" });
+    }
+
+    let profileModel;
+    if (user.role === "student") {
+      profileModel = StudentProfile;
+    } else if (user.role === "landlord") {
+      profileModel = LandlordProfile;
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid user role" });
+    }
+
+    const profileExists = await profileModel.findById(user.details);
+
+    if (!profileExists) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Profile Not Found" });
+    }
+
+    await profileModel.findByIdAndUpdate(profileExists._id, { ...req.body });
+
+    console.log("Profile updated:", profileExists._id);
+    return res.status(200).json({ success: true, message: "Profile updated" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export {
+  signUp,
+  signIn,
+  signOut,
+  refreshAccessToken,
+  createProfile,
+  updateProfile,
+};

@@ -18,10 +18,10 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
-  aadharCard: {
-    type: String,
-    required: true,
-  },
+  // aadharCard: {
+  //   type: String,
+  //   required: true,
+  // },
   email: {
     type: String,
     required: true,
@@ -52,10 +52,7 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
-  fieldOfStudy: {
-    type: String,
-    required: true,
-  },
+
   branch: {
     type: String,
     required: true,
@@ -64,6 +61,13 @@ const studentProfileSchema = new Schema({
     type: String,
     required: true,
   },
+  sentRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RentRequest",
+    },
+  ],
+  rentedHomes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
 });
 
 export const StudentProfile = mongoose.model(

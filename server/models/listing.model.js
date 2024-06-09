@@ -1,9 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 const listingSchema = new Schema({
-  landlord: { type: mongoose.Schema.Types.ObjectId, ref: "Landlord" },
+  landlord: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "LandlordProfile",
+  },
   images: [String],
-  location: String,
+  city: String,
+  coordinates: {
+    type: [Number],
+    index: "2dsphere",
+    default: [null, null],
+  },
   proximityToCampus: Number,
   nearbyPublicTransportation: Boolean,
   roomType: {
@@ -22,10 +30,10 @@ const listingSchema = new Schema({
   },
   rent: {
     type: Number,
-    rentType: {
-      type: String,
-      enum: ["Monthly", "Based on days", "Weekly"],
-    },
+  },
+  rentType: {
+    type: String,
+    enum: ["Monthly", "Based on days", "Weekly"],
   },
   washroomSystem: {
     type: String,
@@ -51,8 +59,7 @@ const listingSchema = new Schema({
     windowsAndNaturalLight: Boolean,
     flooringType: String,
   },
-  rating: Number,
-  reviews: [String],
 });
+listingSchema.index({ coordinates: "2dsphere" });
 
 export const Listing = mongoose.model("Listing", listingSchema);

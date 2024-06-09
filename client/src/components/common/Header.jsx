@@ -55,14 +55,14 @@ const Header = () => {
                 </li>
                 <li>
                   <Link className="md:mr-4" to="/listings">
-                    Listing
+                    Listings
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link className="md:mr-4" to="/">
                     Contact
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
 

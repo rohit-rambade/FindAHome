@@ -54,6 +54,7 @@ userSchema.methods.generateAccessToken = function () {
       id: this._id,
       email: this.email,
       role: this.role,
+      profileDetailId: this.details,
     };
 
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
@@ -69,6 +70,8 @@ userSchema.methods.generateRefreshToken = function () {
   try {
     const payload = {
       id: this._id,
+      profileDetailId: this.details,
+      role: this.role,
     };
 
     return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
@@ -79,6 +82,7 @@ userSchema.methods.generateRefreshToken = function () {
     throw error;
   }
 };
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

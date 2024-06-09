@@ -8,6 +8,11 @@ import Listings from "../components/profile/landlord/Listings";
 import UserProfile from "../components/profile/UserProfile";
 import AddListing from "../components/profile/landlord/AddListing";
 import AllListings from "../pages/AllListings";
+import SingleListing from "../pages/SingleListing";
+import SentRequests from "../components/profile/student/SentRequests";
+import ViewReceivedRequests from "../components/profile/landlord/ViewReceivedRequests";
+import Success from "../components/Success";
+import Cancel from "../components/Cancel";
 
 export const router = createBrowserRouter([
   {
@@ -42,11 +47,28 @@ export const router = createBrowserRouter([
             path: "addlisting",
             element: <AddListing />,
           },
+          {
+            path: "sent-requests",
+            element: <SentRequests />,
+          },
+          { path: "received-requests", element: <ViewReceivedRequests /> },
         ],
       },
       {
         path: "listings",
         element: <AllListings />,
+      },
+      {
+        path: "listing/:id",
+        element: <SingleListing />,
+      },
+      {
+        path: "success",
+        element: <Success />,
+      },
+      {
+        path: "cancel",
+        element: <Cancel />,
       },
     ],
   },
