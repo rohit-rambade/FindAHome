@@ -4,33 +4,39 @@ const StudentProfile = ({ details }) => {
   return (
     <div className="font-poppins space-y-4">
       <div className="space-y-2">
-        <h2 className="text-xl font-bold mb-4">About Me</h2>
-        {/* <p className="text-gray-700">DOB : {details?.dob}</p> */}
-        <p className="text-gray-700">Gender : {details?.gender}</p>
-        <p className="text-gray-700">
+        <h2 className="md:text-xl font-bold mb-4 border border-black p-2 rounded-full w-fit">
+          About Me
+        </h2>
+        {/* <p className="text-black">DOB : {details?.dob}</p> */}
+        <p className="text-black">Gender : {details?.gender}</p>
+        <p className="text-black">
           institution Name : {details?.institutionName}
         </p>
 
-        <p className="text-gray-700">nationality : {details?.nationality}</p>
-        <p className="text-gray-700"> Branch : {details?.branch}</p>
-        <p className="text-gray-700"> academicYear : {details?.academicYear}</p>
+        <p className="text-black">nationality : {details?.nationality}</p>
+        <p className="text-black"> Branch : {details?.branch}</p>
+        <p className="text-black"> academicYear : {details?.academicYear}</p>
       </div>
       <div className="space-y-2">
-        <h2 className="text-xl font-bold mb-4">Address</h2>
-        <p className="text-gray-700">{details?.address}</p>
+        <h2 className="md:text-xl font-bold mb-4 border border-black p-2 rounded-full w-fit">
+          Address
+        </h2>
+        <p className="text-black">{details?.address}</p>
 
-        <p className="text-gray-700">City : {details?.city}</p>
+        <p className="text-black">City : {details?.city}</p>
 
-        <p className="text-gray-700">Pincode {details?.pincode}</p>
+        <p className="text-black">Pincode {details?.pincode}</p>
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-xl font-bold mb-4">Additional Details</h2>
-        <p className="text-gray-700">
+        <h2 className="md:text-xl font-bold mb-4 border border-black p-2 rounded-full w-fit">
+          Additional Details
+        </h2>
+        <p className="text-black">
           Parent Contact : {details?.parentContactNo}
         </p>
 
-        <p className="text-gray-700">Hod Contact: {details?.hodContactNo}</p>
+        <p className="text-black">Hod Contact: {details?.hodContactNo}</p>
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ const SignUp = () => {
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5     "
-                    placeholder="name@company.com"
+                    placeholder="name@gmail.com"
                     required=""
                   />
                 </div>
@@ -128,15 +128,15 @@ const SignUp = () => {
 
                 <button
                   type="submit"
-                  className="w-full  bg-primary-600  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  "
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Create an account
                 </button>
-                <p className="text-sm font-light text-gray-500 ">
-                  Already have an account?
+                <p className="space-x-2 text-sm font-light text-gray-500 ">
+                  <span> Already have an account?</span>
                   <Link
                     to="/signin"
-                    className="font-medium text-primary-600 hover:underline "
+                    className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                   >
                     Sign In
                   </Link>
