@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: shf-frontend
-          image: rohitrambade/shf-frontend:v2
+          image: rohitrambade/shf-frontend:v$BUILD_NUMBER
           ports:
             - containerPort: 80
 
@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
         - name: shf-backend
-          image: rohitrambade/shf-backend:v2
+          image: rohitrambade/shf-backend:v$BUILD_NUMBER
           ports:
             - containerPort: 80
           env:
