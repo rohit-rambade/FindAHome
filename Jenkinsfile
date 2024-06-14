@@ -1,9 +1,7 @@
 pipeline {
     agent any
-
     environment {
-        DOCKER_REGISTRY = 'rohitrambade' 
-        IMAGE_TAG = "v2" 
+        DOCKER_REGISTRY = 'rohitrambade'
     }
 
     stages {
@@ -12,51 +10,44 @@ pipeline {
                 git branch: 'develop', url: 'https://github.com/rohit-rambade/student-housing-finder.git'
             }
         }
-        stage('Build Frontend Image') {
+
+        stage('Build Frontend') {
             steps {
-                script {
-                    sh '''
-                    cd client 
-                    sudo docker build -t ${DOCKER_REGISTRY}/shf-frontend:${IMAGE_TAG} .
-                    '''
+                dir('client') {
+                    sh 'sudo docker build -t ${DOCKER_REGISTRY}/shf-frontend:v${BUILD_NUMBER} .'
                 }
             }
         }
-        
-        stage('Build Backend Image') {
+        stage('Build Backend') {
             steps {
-                script {
-                    sh '''
-                    cd server 
-                    sudo docker build -t ${DOCKER_REGISTRY}/shf-backend:${IMAGE_TAG} .
-                    '''
-                }
-            }
-        }
-        
-        stage('Push To DockerHUB') {
-            steps {
-                script {
-                   
-                  withCredentials([usernamePassword(credentialsId: 'docker-hub-acc', passwordVariable: 'PASS', usernameVariable: 'USERNAME')]) {
-      sh '''
-     echo $PASS | docker login -u $USERNAME --password-stdin
-      sudo docker push $DOCKER_REGISTRY/shf-frontend:$IMAGE_TAG
-      sudo docker push $DOCKER_REGISTRY/shf-backend:$IMAGE_TAG
-      
-      
-      '''
-}
-                   
+                dir('server') {
+                    sh 'sudo docker build -t ${DOCKER_REGISTRY}/shf-backend:v${BUILD_NUMBER} .'
                 }
             }
         }
 
-    }
+        stage('Push to DockerHUB') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        sh 'sudo docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}'
+                        sh 'sudo docker push ${DOCKER_REGISTRY}/shf-frontend:v${BUILD_NUMBER} '
+                        sh 'sudo docker push ${DOCKER_REGISTRY}/shf-backend:v${BUILD_NUMBER} '
+                    }
+                }
+            }
+        }
 
-    post {
-        always {
-            cleanWs()
+        stage('Kubernetes Deploy') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-secret', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                    sh 'kubectl apply -f k8s/ns.yml'
+                    sh 'kubectl apply -f k8s/configMap.yml'
+                    sh 'kubectl apply -f k8s/secret.yml'
+                    sh 'envsubst < k8s/deployment.yml | kubectl apply -f -'
+                    sh ' kubectl apply -f k8s/service.yml'
+                }
+            }
         }
     }
 }
