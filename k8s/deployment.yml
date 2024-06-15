@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: shf-frontend
+  namespace: shf-ns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shf-frontend
+  template:
+    metadata:
+      labels:
+        app: shf-frontend
+    spec:
+      containers:
+        - name: shf-frontend
+          image: rohitrambade/shf-frontend:v$BUILD_NUMBER
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: shf-backend
+  namespace: shf-ns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shf-backend
+  template:
+    metadata:
+      labels:
+        app: shf-backend
+    spec:
+      containers:
+        - name: shf-backend
+          image: rohitrambade/shf-backend:v$BUILD_NUMBER
+          ports:
+            - containerPort: 80
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: shf-backend-config-map
+                  key: PORT
+            - name: MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: shf-backend-config-map
+                  key: MONGO_URL
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: shf-backend-config-map
+                  key: DATABASE_NAME
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shf-backend-secret
+                  key: ACCESS_TOKEN_SECRET
+            - name: REFRESH_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shf-backend-secret
+                  key: REFRESH_TOKEN_SECRET
